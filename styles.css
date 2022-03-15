@@ -1,0 +1,55 @@
+
+
+@font-face {
+	font-family: 'Press Start 2P', cursive;
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+	src: url(fonts/PressStart2P-Regular.ttf);
+}
+
+
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Press Start 2P', cursive;
+    color: black;
+    padding: 0;
+    margin: 0;
+    
+   
+    
+}
+
+h1 {
+    font-size: 2.5rem;
+    padding: .5rem;
+    margin: 0;
+}
+
+h2,
+h3 {
+    color: orange;
+}
+
+#splash_screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    width: 450px;
+    height: 550px;
+}
+#game_over_screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    width: 450px;
+    height: 550px;
+}
+

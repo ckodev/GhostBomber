@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- link to style sheet -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <!-- custom font -->
+    <!-- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"> -->
+    <!-- jQuery script tag -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <!-- game title  -->
+    <title>Shooting Bullets 2</title>
+</head>
+<body>
+
+
+    <h1>Space Laser</h1>
+    <div id="splash_screen" class="screen">
+        <input id="name_input" type="text" placeholder="Enter Name">
+        <button id="start_button" type="submit">Start</button>
+    </div>   
+    <div id="game_on_screen" class="screen">
+        <canvas id="game"></canvas>
+    </div>
+    <div id="game_over_screen" class="screen">
+        <h2 id="final_name"></h2>
+        <h3 id="final_score"></h3>
+        <button id="play_again">Play Again</button>
+        <button id="quit">Quit</button>
+    </div>
+    <!-- link to script  -->
+    <script src="script.js"></script>
+</body>
+</html>
