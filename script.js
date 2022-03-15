@@ -137,6 +137,7 @@ const spaceLaser = {
 
     resetGameBoard(){
         spaceLaser.score = 0;
+        console.log('resetting game board');
         
     }
 
