@@ -77,7 +77,7 @@ const spaceLaser = {
                 enemy.draw(ctx);    
             }   
           })  
-        spaceLaser.scorePoints(); 
+        spaceLaser.scorePoints();
         } 
 
 
@@ -109,21 +109,24 @@ const spaceLaser = {
     gameOver() {
         window.setTimeout(spaceLaser.hideGameScreen, 2000);
         spaceLaser.isRunning = false;
+        
         clearInterval(spawnLoopInterval);
         clearInterval(gameLoopInterval);
     },
     
     hideGameScreen () {
         spaceLaser.switchScreen('#game_over_screen');
+        
     },
 
     gameOverScreen() {
         $('#final_name').text(spaceLaser.playerName)
         $('#final_score').text(spaceLaser.score)
-
+        
         $('#play_again').on('click', () => {
             spaceLaser.switchScreen('game_on_screen')
-            spaceLaser.resetGameBoard();
+            
+            
             
 
         })
@@ -131,14 +134,18 @@ const spaceLaser = {
             spaceLaser.switchScreen('#splash_screen');
             spaceLaser.score = 0;
             spaceLaser.playerName = '';
+            spaceLaser.resetGameBoard();
             
         })
     },
 
     resetGameBoard(){
         spaceLaser.score = 0;
+        player.x = canvas.width / 2.3;
+        player.y = canvas.height / 1.3;
+        enemyController.enemies.length = 0;
         console.log('resetting game board');
-        
+        spaceLaser.gameLoop();
     }
 
 }
