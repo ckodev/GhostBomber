@@ -3,6 +3,7 @@
 
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
+const image = document.getElementById('source');
 
 canvas.width = 450;
 canvas.height = 550;
@@ -16,8 +17,12 @@ const spaceLaser = {
     isRunning: false,
     currentScreen: '',
     $nameInput: $('#name_input'),
+    gameDifficulty: 1,
+    levelBonus: 5000,
+    enemySpeed: 2,
+    enemyDelay: 3,
     
-
+ 
 
     switchScreen(newScreen) {
         $('.screen').hide();
@@ -26,10 +31,15 @@ const spaceLaser = {
 
       
         if (spaceLaser.currentScreen == '#splash_screen') {
-            spaceLaser.splashScreen();
+            // spaceLaser.splashScreen();
+            $('#start_button').on('click', () => {
+                spaceLaser.startGame();
+            })
         }
         if (spaceLaser.currentScreen == '#game_on_screen') {
-            spaceLaser.startGame();
+            
+          
+            
         }
         if (spaceLaser.currentScreen == '#game_over_screen' ) {
             spaceLaser.gameOverScreen();
@@ -37,21 +47,32 @@ const spaceLaser = {
 
     },
 
-    splashScreen() {
-        // spaceLaser.currentScreen = 'splash_screen'
-        $('#start_button').on('click', () => {
-            spaceLaser.switchScreen('#game_on_screen');
-            
-        })
-    },
+    // splashScreen() {
+    //     // spaceLaser.currentScreen = 'splash_screen'
+    //     $('#start_button').on('click', () => {})
+    // },
 
     startGame() {
-        clearInterval(gameLoopInterval);
-        gameLoopInterval = setInterval(spaceLaser.gameLoop, 1000 / 60);
+            spaceLaser.resetGameBoard();
+            clearInterval(gameLoopInterval);
+            clearInterval(spawnLoopInterval);
+            clearInterval(increaseDifficultyInterval);
+            gameLoopInterval = setInterval(spaceLaser.gameLoop, 1000 / 60);
+            spawnLoopInterval = setInterval(spaceLaser.enemySpawnLoop, 500);
+            // increaseDifficultyInterval = setInterval(spaceLaser.increaseDifficulty, 10000);
+            increaseDifficultyInterval = setInterval(() => {
+               spaceLaser.enemySpeed++;
+               spaceLaser.gameDifficulty++;
+               spaceLaser.enemyDelay -= .5;
+            }, 10000);
+
+
+        
         if (spaceLaser.$nameInput.val().length > 0  && spaceLaser.$nameInput.val().length < 9) {
+            spaceLaser.switchScreen('#game_on_screen');  
             spaceLaser.isRunning = true;
             spaceLaser.playerName = spaceLaser.$nameInput.val();
-        } else if (spaceLaser.$nameInput.val().length >= 9){
+        } else if (spaceLaser.$nameInput.val().length >= 9 || spaceLaser.$nameInput.val().length == 0 ){ 
             alert('your name is too long! 8 charactor max. ');
         } else {
             alert('Please enter your name!');
@@ -62,7 +83,7 @@ const spaceLaser = {
     gameLoop() {
 
         if (spaceLaser.isRunning == true) {
-            ctx.fillStyle = "black";
+            ctx.fillStyle = "blue";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             bulletController.draw(ctx); 
             player.draw(ctx);  
@@ -85,25 +106,33 @@ const spaceLaser = {
 
     scorePoints() {
         if (spaceLaser.isRunning == true) {
+
             ctx.font = "16px 'Press Start 2P'";
             ctx.fillStyle = "orange";
             ctx.fillText("Score: "+spaceLaser.score, 15, 40);
+            ctx.font = "16px 'Press Start 2P'";
+            ctx.fillStyle = "orange";
+            ctx.fillText("lvl: "+spaceLaser.gameDifficulty, 15, 80);
             ctx.font = "16px 'Press Start 2P'";
             ctx.fillStyle = "orange";
             ctx.fillText(""+spaceLaser.playerName, 300, 40);
         }
     },
 
-    enemySpawnLoop() {   
-        if (spaceLaser.isRunning == true) {
+    enemySpawnLoop() {
+        if (spaceLaser.isRunning == true) 
+        {
+            // spaceLaser.enemySpeed = spaceLaser.enemySpeed;
             const enemySpawn = Math.random();
             if (enemySpawn > 0.3) {
                 const xPos = Math.floor(Math.random()*350) + 40;
-                enemyController.enemyMove(xPos, -70, 2, 3);      
+                enemyController.enemyMove(xPos, -70, spaceLaser.enemySpeed, spaceLaser.enemyDelay);      
             }
         }  
-        
     },
+
+
+
     
 
     gameOver() {
@@ -112,6 +141,8 @@ const spaceLaser = {
         
         clearInterval(spawnLoopInterval);
         clearInterval(gameLoopInterval);
+        clearInterval(increaseDifficultyInterval);
+        
     },
     
     hideGameScreen () {
@@ -122,9 +153,14 @@ const spaceLaser = {
     gameOverScreen() {
         $('#final_name').text(spaceLaser.playerName)
         $('#final_score').text(spaceLaser.score)
+        $('#final_level').text('level:'+spaceLaser.gameDifficulty)
         
         $('#play_again').on('click', () => {
-            spaceLaser.switchScreen('game_on_screen')
+            spaceLaser.switchScreen('#game_on_screen')
+            clearInterval(spawnLoopInterval);
+            clearInterval(gameLoopInterval);
+            spaceLaser.startGame();
+            
             
             
             
@@ -134,7 +170,7 @@ const spaceLaser = {
             spaceLaser.switchScreen('#splash_screen');
             spaceLaser.score = 0;
             spaceLaser.playerName = '';
-            spaceLaser.resetGameBoard();
+            
             
         })
     },
@@ -144,8 +180,12 @@ const spaceLaser = {
         player.x = canvas.width / 2.3;
         player.y = canvas.height / 1.3;
         enemyController.enemies.length = 0;
+        bulletController.bullets.length = 0;
+        spaceLaser.gameDifficulty = 1; 
+        spaceLaser.enemySpeed = 2;
+        spaceLaser.enemyDelay = 3;
         console.log('resetting game board');
-        spaceLaser.gameLoop();
+        // spaceLaser.gameLoop();
     }
 
 }
@@ -158,7 +198,7 @@ class Player {
         this.color = 'orange',
         this.bulletController = bulletController,
         this.width = 50,
-        this.height = 70,
+        this.height = 75,
         this.speed = 5,
 
         document.addEventListener('keydown', this.keydown);
@@ -167,11 +207,15 @@ class Player {
     }
 
     draw(ctx) {
+
+        
         this.move();
-        ctx.strokeStyle = "yellow";
-        ctx.fillStyle = this.color;
-        ctx.strokeRect(this.x, this.y, this.width, this.height);
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.drawImage(image,this.x, this.y, this.width, this.height);
+      
+        // ctx.strokeStyle = "yellow";
+        // ctx.fillStyle = this.color;
+        // ctx.strokeRect(this.x, this.y, this.width, this.height);
+        // ctx.fillRect(this.x, this.y, this.width, this.height);
 
         this.shoot();
     }
@@ -411,7 +455,9 @@ class Enemy {
 
 // CLASS VARIABLES
 let gameLoopInterval = null;
-const spawnLoopInterval = setInterval(spaceLaser.enemySpawnLoop, 500);
+let spawnLoopInterval = setInterval(spaceLaser.enemySpawnLoop, 500);
+let increaseDifficultyInterval = setInterval(spaceLaser.increaseDifficulty, 20000)
+let resumeGamePlay = setInterval(spaceLaser.resumeGamePlay,4000);
 
 const enemy = new Enemy(canvas);
 const enemyController = new EnemyController(canvas);
