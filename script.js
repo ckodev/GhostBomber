@@ -3,7 +3,8 @@
 
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
-const image = document.getElementById('source');
+const tomcat = document.getElementById('tomcat');
+const mig = document.getElementById('tomcat');
 
 canvas.width = 450;
 canvas.height = 550;
@@ -83,7 +84,9 @@ const spaceLaser = {
     gameLoop() {
 
         if (spaceLaser.isRunning == true) {
-            ctx.fillStyle = "blue";
+            ctx.fillStyle = "black";
+            ctx.strokeRect(0,0,canvas.width, canvas.height);
+            ctx.strokStyle = "black";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             bulletController.draw(ctx); 
             player.draw(ctx);  
@@ -197,8 +200,8 @@ class Player {
         this.y = y,
         this.color = 'orange',
         this.bulletController = bulletController,
-        this.width = 50,
-        this.height = 75,
+        this.width = 37,
+        this.height = 67.1,
         this.speed = 5,
 
         document.addEventListener('keydown', this.keydown);
@@ -210,7 +213,7 @@ class Player {
 
         
         this.move();
-        ctx.drawImage(image,this.x, this.y, this.width, this.height);
+        ctx.drawImage(tomcat,this.x, this.y, this.width, this.height);
       
         // ctx.strokeStyle = "yellow";
         // ctx.fillStyle = this.color;
