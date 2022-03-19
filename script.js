@@ -3,8 +3,12 @@
 
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
-const tomcat = document.getElementById('tomcat');
-const mig = document.getElementById('tomcat');
+const rol = document.getElementById('rol');
+const ghost = document.getElementById('ghost');
+const bomb = document.getElementById('bomb');
+const dead = document.getElementById('dead');
+const instructions = document.getElementById('instructions');
+const controls = document.getElementById('controls');
 
 canvas.width = 450;
 canvas.height = 550;
@@ -18,10 +22,11 @@ const spaceLaser = {
     isRunning: false,
     currentScreen: '',
     $nameInput: $('#name_input'),
-    gameDifficulty: 1,
-    levelBonus: 5000,
     enemySpeed: 2,
     enemyDelay: 3,
+    highScore: [],
+    infoScreen: '',
+
     
  
 
@@ -29,14 +34,42 @@ const spaceLaser = {
         $('.screen').hide();
         $(newScreen).show();
         spaceLaser.currentScreen = newScreen;
+        spaceLaser.infoScreen = 'instructions';
 
       
         if (spaceLaser.currentScreen == '#splash_screen') {
-            // spaceLaser.splashScreen();
             $('#start_button').on('click', () => {
                 spaceLaser.startGame();
+            }),
+
+             
+                $('#instructions-btn').on('click',() => {
+                    $('#controls') .attr('style', 'display:none'); 
+                    $('#instructions') .attr('style', 'display:');
+                    // if (spaceLaser.infoScreen == 'controls') {
+                    //     $('#controls').css('display','none'); 
+                    //     $('#instructions').css('display','block');
+                    //     spaceLaser.infoScreen = 'instructions';
+                    // }   
+                })
+            
+            
+            $('#controls-btn').on('click', () => {
+
+                $('#instructions').css('display','none'); 
+                $('#controls').css('display','block');
+                // if (spaceLaser.infoScreen == 'instructions') {
+                //     $('#instructions').css('display','none'); 
+                //     $('#controls').css('display','block');
+                //     spaceLaser.infoScreen = 'controls'; 
+                // }
+                
             })
         }
+
+           
+
+
         if (spaceLaser.currentScreen == '#game_on_screen') {
             
           
@@ -59,12 +92,11 @@ const spaceLaser = {
             clearInterval(spawnLoopInterval);
             clearInterval(increaseDifficultyInterval);
             gameLoopInterval = setInterval(spaceLaser.gameLoop, 1000 / 60);
-            spawnLoopInterval = setInterval(spaceLaser.enemySpawnLoop, 500);
+            spawnLoopInterval = setInterval(spaceLaser.enemySpawnLoop, 300);
             // increaseDifficultyInterval = setInterval(spaceLaser.increaseDifficulty, 10000);
             increaseDifficultyInterval = setInterval(() => {
-               spaceLaser.enemySpeed++;
-               spaceLaser.gameDifficulty++;
-               spaceLaser.enemyDelay -= .5;
+               spaceLaser.enemySpeed = spaceLaser.enemySpeed * 1.2;
+               spaceLaser.enemyDelay = spaceLaser.enemyDelay/2;
             }, 10000);
 
 
@@ -73,9 +105,9 @@ const spaceLaser = {
             spaceLaser.switchScreen('#game_on_screen');  
             spaceLaser.isRunning = true;
             spaceLaser.playerName = spaceLaser.$nameInput.val();
-        } else if (spaceLaser.$nameInput.val().length >= 9 || spaceLaser.$nameInput.val().length == 0 ){ 
+        } else if (spaceLaser.$nameInput.val().length >= 9){ 
             alert('your name is too long! 8 charactor max. ');
-        } else {
+        } else  if (spaceLaser.$nameInput.val().length == 0 ){
             alert('Please enter your name!');
         }
 
@@ -84,9 +116,7 @@ const spaceLaser = {
     gameLoop() {
 
         if (spaceLaser.isRunning == true) {
-            ctx.fillStyle = "black";
-            ctx.strokeRect(0,0,canvas.width, canvas.height);
-            ctx.strokStyle = "black";
+            ctx.fillStyle = "#D0A380";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             bulletController.draw(ctx); 
             player.draw(ctx);  
@@ -111,14 +141,11 @@ const spaceLaser = {
         if (spaceLaser.isRunning == true) {
 
             ctx.font = "16px 'Press Start 2P'";
-            ctx.fillStyle = "orange";
-            ctx.fillText("Score: "+spaceLaser.score, 15, 40);
+            ctx.fillStyle = "black";
+            ctx.fillText("Score: "+spaceLaser.score, 15, 535);
             ctx.font = "16px 'Press Start 2P'";
-            ctx.fillStyle = "orange";
-            ctx.fillText("lvl: "+spaceLaser.gameDifficulty, 15, 80);
-            ctx.font = "16px 'Press Start 2P'";
-            ctx.fillStyle = "orange";
-            ctx.fillText(""+spaceLaser.playerName, 300, 40);
+            ctx.fillStyle = "black";
+            ctx.fillText(""+spaceLaser.playerName, 300, 535);
         }
     },
 
@@ -150,23 +177,37 @@ const spaceLaser = {
     
     hideGameScreen () {
         spaceLaser.switchScreen('#game_over_screen');
-        
     },
 
     gameOverScreen() {
-        $('#final_name').text(spaceLaser.playerName)
-        $('#final_score').text(spaceLaser.score)
-        $('#final_level').text('level:'+spaceLaser.gameDifficulty)
+        if (spaceLaser.score < 50) {
+            $('#final_name').text('C\'mon ' + spaceLaser.playerName+'! I expected more from you. ')
+            $('#final_score').text('You scored:'+spaceLaser.score+' points')
+        }
+        if (spaceLaser.score >= 50 && spaceLaser.score < 100) {
+            $('#final_name').text('So you scored some points... big whoop, wanna fight about? Take your anger out on the court '+ spaceLaser.playerName+'!')
+            $('#final_score').text('You scored:'+spaceLaser.score+' points!')
+        }
+        if (spaceLaser.score >= 100 && spaceLaser.score < 200) {
+            $('#final_name').text('I am impressed '+ spaceLaser.playerName+'! Nice work!')
+            $('#final_score').text('You scored:'+spaceLaser.score+' points!')
+        }
+        if (spaceLaser.score >= 200 && spaceLaser.score < 400) {
+            $('#final_name').text('Thats quite the score '+ spaceLaser.playerName+'! Righteous dude!')
+            $('#final_score').text('You scored:'+spaceLaser.score+' points!')
+        }
+        if (spaceLaser.score >400) {
+            $('#final_name').text(spaceLaser.playerName+' You are stone cold killer')
+            $('#final_score').text('You scored:'+spaceLaser.score+' points!')
+        }
+        
+        
         
         $('#play_again').on('click', () => {
             spaceLaser.switchScreen('#game_on_screen')
             clearInterval(spawnLoopInterval);
             clearInterval(gameLoopInterval);
             spaceLaser.startGame();
-            
-            
-            
-            
 
         })
         $('#quit').on('click', () => {
@@ -190,7 +231,6 @@ const spaceLaser = {
         console.log('resetting game board');
         // spaceLaser.gameLoop();
     }
-
 }
 
 
@@ -200,9 +240,10 @@ class Player {
         this.y = y,
         this.color = 'orange',
         this.bulletController = bulletController,
-        this.width = 37,
-        this.height = 67.1,
+        this.width = 40,
+        this.height = 40,
         this.speed = 5,
+        
 
         document.addEventListener('keydown', this.keydown);
         document.addEventListener('keyup', this.keyup);
@@ -210,17 +251,10 @@ class Player {
     }
 
     draw(ctx) {
-
-        
         this.move();
-        ctx.drawImage(tomcat,this.x, this.y, this.width, this.height);
-      
-        // ctx.strokeStyle = "yellow";
-        // ctx.fillStyle = this.color;
-        // ctx.strokeRect(this.x, this.y, this.width, this.height);
-        // ctx.fillRect(this.x, this.y, this.width, this.height);
-
         this.shoot();
+        ctx.drawImage(rol,this.x, this.y, this.width, this.height);
+        
     }
 
     collideWith(sprite) {
@@ -230,6 +264,9 @@ class Player {
             this.y < sprite.y + sprite.height &&
             this.y + this.height > sprite.y
             ) {
+                ctx.fillStyle = '#D0A380';
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+                ctx.drawImage(dead,this.x, this.y, this.width, this.height);
                 return true;
             }
             return false;
@@ -241,8 +278,8 @@ class Player {
             const speed = 8;
             const delay = 6;
             const damage = 1;
-            const bulletX = this.x + this.width/2.3;
-            const bulletY = this.y;
+            const bulletX = this.x + this.width/3;
+            const bulletY = this.y - this.height/2.5;
             this.bulletController.shoot(bulletX, bulletY, speed, damage, delay);
 
         }
@@ -252,7 +289,7 @@ class Player {
         if (this.upPressed && this.y > 0) {
             this.y -= this.speed;
         }
-        if (this.downPressed && this.y < canvas.height-this.height) {
+        if (this.downPressed && this.y < (canvas.height-this.height * 2.5)) {
             this.y +=this.speed;
         }
         if (this.leftPressed && this.x > 0) {
@@ -369,17 +406,18 @@ class Bullet {
         this.damage = damage;
 
         this.color = "red";
-        this.width = 5;
-        this.height = 8;
+        this.width = 15;
+        this.height = 25;
     }
 
     draw(ctx) {
         // fillStyle specifies color, gradient or pattern to be used inside of a shape 
-        ctx.fillStyle = this.color;
+        ctx.drawImage(ghost,this.x, this.y, this.width, this.height);
+        // ctx.fillStyle = this.color;
         // this "-=" is what moves the bullet up the screen
         this.y -= this.speed;
         // fillRect colors in the bullet
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+        // ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 
     collideWith(sprite) {
@@ -388,7 +426,7 @@ class Bullet {
             this.y < sprite.y +sprite.height &&
             this.x + this.height >sprite.x
             ) {
-                spaceLaser.score = spaceLaser.score +10000;
+                spaceLaser.score = spaceLaser.score +10;
                 return true;
             }
             return false;
@@ -438,19 +476,20 @@ class Enemy {
         this.y = y;
         this.speed = speed;
 
-        this.color = 'white';
-        this.width = 40;
-        this.height = 60;
+        this.color = 'black';
+        this.width = 35;
+        this.height = 30;
 
     }
 
     draw(ctx) {
         // fillStyle specifies color, gradient or pattern to be used inside of a shape 
-        ctx.fillStyle = this.color;
+        ctx.drawImage(bomb,this.x, this.y, this.width, this.height);
+        // ctx.fillStyle = this.color;
         // this moves the enemy down the screen
         this.y += this.speed;
         // fillRect colors in the enemy
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+        // ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 
     
@@ -460,7 +499,6 @@ class Enemy {
 let gameLoopInterval = null;
 let spawnLoopInterval = setInterval(spaceLaser.enemySpawnLoop, 500);
 let increaseDifficultyInterval = setInterval(spaceLaser.increaseDifficulty, 20000)
-let resumeGamePlay = setInterval(spaceLaser.resumeGamePlay,4000);
 
 const enemy = new Enemy(canvas);
 const enemyController = new EnemyController(canvas);
@@ -471,6 +509,8 @@ const player = new Player(canvas.width / 2.3, canvas.height / 1.3, bulletControl
 // document ready
 $(document).ready(() => {
     spaceLaser.switchScreen('#splash_screen');
+    $('#instructions').css('display','block');
+    
 })
 
 

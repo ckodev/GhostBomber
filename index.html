@@ -18,28 +18,63 @@
 <body>
 
 
-    <h1>Space Laser</h1>
+    <h1>Ghost Bomber</h1>
     <div id="splash_screen" class="screen">
-        <input id="name_input" type="text" placeholder="Enter Name">
-        <button id="start_button" type="submit">Start</button>
+        <div class="splash-container">
+
+            <div class="button-wrapper">
+                <button class="menu-button" id="instructions-btn" type="submit">Instructions</button>
+                <button class="menu-button" id="controls-btn" type="submit">Controls</button>
+            </div>
+
+            <section id="instructions" style="display:none">
+                <h2>Intstructions</h2>
+                <p>Destroy as many bombs as possible without getting hit!<br><br>
+                   It may seem easy but the longer you survive, the more difficult it will get.<br> <br>God speed Ghost Bomber.
+                </p>
+            </section>
+
+            <section id="controls" style="display:none">
+                <h2>Controls</h2>
+                <p>Move: left/right/up/down Arrows</p>
+                <p>Shoot: Space bar</p>
+            </section>
+
+                <div class="button-wrapper">
+                    <input id="name_input" type="text" placeholder="Name">
+                    <button id="start_button" type="submit">Start</button>
+                </div>
+            
+        </div>
     </div>   
     <div id="game_on_screen" class="screen">
         <canvas id="game"></canvas>
         <div style="display:none;">
-            <img id="tomcat"
-                 src="images/f-14tomcat.png">
+            <img id="rol"
+                 src="images/face-rolling-eyes-regular.svg">
+          </div>
+        <div style="display:none;">
+            <img id="dead"
+                 src="images/face-dizzy-regular.svg">
           </div>
           <div style="display:none;">
-            <img id="mig"
-                 src="images/f-14tomcat.png">
+            <img id="ghost"
+                 src="images/ghost-solid.svg">
+          </div>
+          <div style="display:none;">
+            <img id="bomb"
+                 src="images/bomb-solid.svg">
           </div>
     </div>
     <div id="game_over_screen" class="screen">
-        <h2 id="final_name"></h2>
-        <h3 id="final_level"></h3>
-        <h3 id="final_score"></h3>
-        <button id="play_again">Play Again</button>
-        <button id="quit">Quit</button>
+        <div class="game-over-wrapper">
+            <h3 id="final_score"></h3>
+            <p id="final_name"></p>
+            <div class="button-wrapper">
+                <button id="play_again">Play Again</button>
+                <button id="quit">Quit</button>
+            </div>
+        </div>
     </div>
     <!-- link to script  -->
     <script src="script.js"></script>
