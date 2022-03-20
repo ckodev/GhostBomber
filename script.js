@@ -10,6 +10,19 @@ const dead = document.getElementById('dead');
 const instructions = document.getElementById('instructions');
 const controls = document.getElementById('controls');
 
+const mostRecentScore = localStorage.getItem('mostRecentScore');
+const highScoresName = document.getElementById('high_scores_name');
+const highScoresScore = document.getElementById('high_scores_score');
+
+
+const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+console.log(highScores);
+
+
+
+
+const MAX_HIGH_SCORES = 10;
+
 canvas.width = 450;
 canvas.height = 550;
 
@@ -27,7 +40,31 @@ const spaceLaser = {
     highScore: [],
     infoScreen: '',
 
-    
+
+    saveHighScore() {
+        console.log('high score saved!')
+
+         const playerScore = {
+            score: spaceLaser.score,
+            name: spaceLaser.playerName,
+        }
+        highScores.push(playerScore)
+        highScores.sort( (a,b) => {
+            return b.score - a.score;
+        } )
+        highScores.splice(10);
+
+        localStorage.setItem('highScores', JSON.stringify(highScores))
+
+        highScoresName.innerHTML = highScores.map(playerScore => {
+            return `<li class="high-scores" >${playerScore.name}</li>`
+        }).join("");
+        highScoresScore.innerHTML = highScores.map(playerScore => {
+            return `<li class="high-scores" >${playerScore.score}</li>`
+        }).join("");
+
+        console.log(highScores);
+    },
  
 
     switchScreen(newScreen) {
@@ -43,27 +80,26 @@ const spaceLaser = {
             }),
 
              
-                $('#instructions-btn').on('click',() => {
-                    $('#controls') .attr('style', 'display:none'); 
-                    $('#instructions') .attr('style', 'display:');
-                    // if (spaceLaser.infoScreen == 'controls') {
-                    //     $('#controls').css('display','none'); 
-                    //     $('#instructions').css('display','block');
-                    //     spaceLaser.infoScreen = 'instructions';
-                    // }   
-                })
-            
+            $('#instructions-btn').on('click',() => {
+                $('#high_scores') .attr('style', 'display:none'); 
+                $('#controls') .attr('style', 'display:none'); 
+                $('#instructions') .attr('style', 'display:');
+                $('#high-scores-btn').removeClass('load')
+                
+            })
+        
             
             $('#controls-btn').on('click', () => {
-
+                $('#high_scores') .attr('style', 'display:none');
                 $('#instructions').css('display','none'); 
-                $('#controls').css('display','block');
-                // if (spaceLaser.infoScreen == 'instructions') {
-                //     $('#instructions').css('display','none'); 
-                //     $('#controls').css('display','block');
-                //     spaceLaser.infoScreen = 'controls'; 
-                // }
-                
+                $('#controls').css('display','block'); 
+                $('#high-scores-btn').removeClass('load')
+            })
+
+            $('#high-scores-btn').on('click', () => {
+                $('#controls') .attr('style', 'display:none');
+                $('#instructions').css('display','none'); 
+                $('#high_scores').css('display','block'); 
             })
         }
 
@@ -77,6 +113,7 @@ const spaceLaser = {
         }
         if (spaceLaser.currentScreen == '#game_over_screen' ) {
             spaceLaser.gameOverScreen();
+
         }
 
     },
@@ -180,28 +217,30 @@ const spaceLaser = {
     },
 
     gameOverScreen() {
+
+        localStorage.setItem('mostRecentScore', spaceLaser.score);
+        spaceLaser.saveHighScore(spaceLaser.score);
+
         if (spaceLaser.score < 50) {
             $('#final_name').text('C\'mon ' + spaceLaser.playerName+'! I expected more from you. ')
-            $('#final_score').text('You scored:'+spaceLaser.score+' points')
+            $('#final_score').text('Score: '+spaceLaser.score+' points!')
         }
         if (spaceLaser.score >= 50 && spaceLaser.score < 100) {
             $('#final_name').text('So you scored some points... big whoop, wanna fight about? Take your anger out on the court '+ spaceLaser.playerName+'!')
-            $('#final_score').text('You scored:'+spaceLaser.score+' points!')
+            $('#final_score').text('Score: '+spaceLaser.score+' points!')
         }
         if (spaceLaser.score >= 100 && spaceLaser.score < 200) {
             $('#final_name').text('I am impressed '+ spaceLaser.playerName+'! Nice work!')
-            $('#final_score').text('You scored:'+spaceLaser.score+' points!')
+            $('#final_score').text('Score: '+spaceLaser.score+' points!')
         }
         if (spaceLaser.score >= 200 && spaceLaser.score < 400) {
             $('#final_name').text('Thats quite the score '+ spaceLaser.playerName+'! Righteous dude!')
-            $('#final_score').text('You scored:'+spaceLaser.score+' points!')
+            $('#final_score').text('Score: '+spaceLaser.score+' points!')
         }
         if (spaceLaser.score >400) {
             $('#final_name').text(spaceLaser.playerName+' You are stone cold killer')
-            $('#final_score').text('You scored:'+spaceLaser.score+' points!')
+            $('#final_score').text('Score: '+spaceLaser.score+' points!')
         }
-        
-        
         
         $('#play_again').on('click', () => {
             spaceLaser.switchScreen('#game_on_screen')
@@ -214,8 +253,7 @@ const spaceLaser = {
             spaceLaser.switchScreen('#splash_screen');
             spaceLaser.score = 0;
             spaceLaser.playerName = '';
-            
-            
+            $('#name_input').val('');    
         })
     },
 
@@ -509,8 +547,13 @@ const player = new Player(canvas.width / 2.3, canvas.height / 1.3, bulletControl
 // document ready
 $(document).ready(() => {
     spaceLaser.switchScreen('#splash_screen');
-    $('#instructions').css('display','block');
-    
+    $('#high-scores-btn').addClass('load')
+    highScoresName.innerHTML = highScores.map(playerScore => {
+        return `<li class="high-scores" >${playerScore.name}</li>`
+    }).join("");
+    highScoresScore.innerHTML = highScores.map(playerScore => {
+        return `<li class="high-scores" >${playerScore.score}</li>`
+    }).join("");
 })
 
 

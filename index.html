@@ -12,23 +12,38 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"> -->
     <!-- jQuery script tag -->
     <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <!-- font awesome kit -->
+    <script src="https://kit.fontawesome.com/7dbc5a702c.js" crossorigin="anonymous"></script>
     <!-- game title  -->
-    <title>Shooting Bullets 2</title>
+    <title>Ghost Bomber</title>
 </head>
 <body>
 
 
-    <h1>Ghost Bomber</h1>
+    <h1>Ghost <br>Bomber</h1>
     <div id="splash_screen" class="screen">
         <div class="splash-container">
 
-            <div class="button-wrapper">
+            <div class="menu-button-wrapper">
+                <button class="menu-button" id="high-scores-btn" type="submit">High Scores</button>
                 <button class="menu-button" id="instructions-btn" type="submit">Instructions</button>
                 <button class="menu-button" id="controls-btn" type="submit">Controls</button>
             </div>
 
+            <section id="high_scores" style="display:block">
+                <h2>High Scores</h2>
+                <div class="high_scores_wrapper">
+                    <div class="high_scores_name_wrapper">
+                        <ol id="high_scores_name"></ol>
+                    </div>
+                    <div class="high_scores_score_wrapper">
+                        <ul id="high_scores_score"></ul>
+                    </div>
+                </div>
+            </section>
+
             <section id="instructions" style="display:none">
-                <h2>Intstructions</h2>
+                <h2>Instructions</h2>
                 <p>Destroy as many bombs as possible without getting hit!<br><br>
                    It may seem easy but the longer you survive, the more difficult it will get.<br> <br>God speed Ghost Bomber.
                 </p>
@@ -36,12 +51,12 @@
 
             <section id="controls" style="display:none">
                 <h2>Controls</h2>
-                <p>Move: left/right/up/down Arrows</p>
-                <p>Shoot: Space bar</p>
+                <p>Move: left/right/up/down Arrows </p>
+                <p>Shoot: <br>Space bar</p>
             </section>
 
                 <div class="button-wrapper">
-                    <input id="name_input" type="text" placeholder="Name">
+                    <input id="name_input" type="text" placeholder="EnterName">
                     <button id="start_button" type="submit">Start</button>
                 </div>
             
