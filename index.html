@@ -19,8 +19,22 @@
 </head>
 <body>
 
-
-    <h1>Ghost <br>Bomber</h1>
+    
+    <div class="header-wrapper">
+        <h1>Ghost <br>Bomber</h1>
+        <div>
+            <img id="music_symbol"
+                 src="images/music-solid.svg">
+          </div>
+        <div>
+            <img id="play_button"
+                 src="images/play-solid.svg">
+          </div>
+        <div>
+            <img id="pause_button"
+                 src="images/pause-solid.svg">
+          </div>
+    </div>
     <div id="splash_screen" class="screen">
         <div class="splash-container">
 
@@ -62,6 +76,9 @@
             
         </div>
     </div>   
+    <div id="game_countdown_screen" class="screen">
+        <h2>3..2..1...</h2>
+    </div>
     <div id="game_on_screen" class="screen">
         <canvas id="game"></canvas>
         <div style="display:none;">
@@ -91,6 +108,13 @@
             </div>
         </div>
     </div>
+    
+    <audio id="smooth_jazz"><source src="audio/smooth-jazz.mp3" type="audio/mp3"></audio>
+    <audio id="dead_audio"><source src="audio/game-over.wav" type="audio/wav"></audio>
+    <audio id="shoot_audio"><source src="audio/ghost-sound-shoot.mp3" type="audio/mp3"></audio>
+    <audio id="321_audio"><source src="audio/3-2-1.wav" type="audio/wav"></audio>
+    <audio id="hit_audio"><source src="audio/pickupCoin (1).wav" type="audio/wav"></audio>
+    
     <!-- link to script  -->
     <script src="script.js"></script>
 </body>
