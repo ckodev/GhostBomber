@@ -9,9 +9,13 @@ canvas.height = 550;
 
 //player image varaibles
 const rol = document.getElementById('rol');
+const rolDark = document.getElementById('rol_dark');
 const ghost = document.getElementById('ghost');
+const ghostDark = document.getElementById('ghost_dark');
 const bomb = document.getElementById('bomb');
+const bombDark = document.getElementById('bomb_dark');
 const dead = document.getElementById('dead');
+const deadDark = document.getElementById('dead_dark');
 
 //splash-screen variables
 const instructions = document.getElementById('instructions');
@@ -27,6 +31,7 @@ console.log(highScores);
 const MAX_HIGH_SCORES = 10;
 
 // audio variables 
+const darkAmbience = document.getElementById('dark_ambience');
 const smoothJazz = document.getElementById('smooth_jazz');
 const countDown = document.getElementById('321_audio');
 const deadSound = document.getElementById('dead_audio');
@@ -36,8 +41,109 @@ const hitSound = document.getElementById('hit_audio');
 deadSound.volume = 0.5;
 countDown.volume = 0.1;
 hitSound.volume = 0.3;
+smoothJazz.volume = 0.7;
 smoothJazz.preload = true;
 smoothJazz.loop = true;
+darkAmbience.volume = 0.7;
+darkAmbience.preload = true;
+darkAmbience.loop = true;
+
+
+
+// darkmode button variable 
+const darkModeBtn = document.getElementById('moon_button');
+darkModeBtn.addEventListener('click', darkMode) 
+darkModeBtn.addEventListener('mousedown', function(e){
+    e.preventDefault();
+});
+// lightmode button variable
+const lightModeBtn = document.getElementById('sun_button');
+lightModeBtn.addEventListener('click', lightMode)
+lightModeBtn.addEventListener('mousedown', function(e){
+    e.preventDefault();
+});
+// dark mode item variables
+const button = document.querySelectorAll('button');
+const menuItem1 = document.querySelector('.menu-button1');
+const menuItem2 = document.querySelector('.menu-button2');
+const menuItem3 = document.querySelector('.menu-button3');
+const instructionsBtn = document.getElementById('instructions-btn');
+const controlsBtn = document.getElementById('controls-btn');
+const highScoresBtn = document.getElementById('high-scores-btn');
+const nameInput = document.getElementById('name_input');
+const startBtn = document.getElementById('start_button');
+const splash = document.getElementById('splash_screen');
+const count = document.getElementById('game_countdown_screen');
+const playAgain = document.getElementById('play_again');
+const quit = document.getElementById('quit');
+const over = document.getElementById('game_over_screen');
+const gameOnScreen = document.getElementById('game');
+const credits = document.getElementById('credits-btn');
+ 
+//dark mode function 
+function darkMode() {
+    
+    if (spaceLaser.soundOn == true) {
+        smoothJazz.pause();
+        smoothJazz.currentTime = 0;
+        darkAmbience.play();
+        $('#pause_button').css('display','block'); 
+        $('#play_button').css('display','none'); 
+    }
+    
+
+    darkModeBtn.style.display = 'none';
+    lightModeBtn.style.display = 'block';
+    lightModeBtn.classList.add('dark');
+    document.body.classList.add('dark');
+    menuItem1.classList.add('dark');
+    menuItem2.classList.add('dark');
+    menuItem3.classList.add('dark');
+    instructionsBtn.classList.add('dark');
+    controlsBtn.classList.add('dark');
+    highScoresBtn.classList.add('dark');
+    nameInput.classList.add('dark');
+    startBtn.classList.add('dark');
+    splash.classList.add('dark');
+    count.classList.add('dark');
+    playAgain.classList.add('dark');
+    quit.classList.add('dark');
+    over.classList.add('dark');
+    gameOnScreen.classList.add('dark');
+    credits.classList.add('dark');
+    
+}
+//dark mode function
+function lightMode() {
+    
+    if (spaceLaser.soundOn == true) {
+        darkAmbience.pause();
+        darkAmbience.currentTime = 0;
+        smoothJazz.play();
+        $('#pause_button').css('display','block'); 
+        $('#play_button').css('display','none');
+    }
+    
+
+    darkModeBtn.style.display = 'block';
+    lightModeBtn.style.display = 'none';
+    document.body.classList.remove('dark');
+    menuItem1.classList.remove('dark');
+    menuItem2.classList.remove('dark');
+    menuItem3.classList.remove('dark');
+    instructionsBtn.classList.remove('dark');
+    controlsBtn.classList.remove('dark');
+    highScoresBtn.classList.remove('dark');
+    nameInput.classList.remove('dark');
+    startBtn.classList.remove('dark');
+    splash.classList.remove('dark');
+    count.classList.remove('dark');
+    playAgain.classList.remove('dark');
+    quit.classList.remove('dark');
+    over.classList.remove('dark');
+    gameOnScreen.classList.remove('dark');
+    credits.classList.remove('dark');
+}
 
 
 // Game object-------------------------------------------------------------------
@@ -57,6 +163,7 @@ const spaceLaser = {
 
 
 
+
     shootSound() {
         if (spaceLaser.soundOn ==true){
             shootSound.volume = 0.1;
@@ -73,6 +180,7 @@ const spaceLaser = {
         }
 
         highScores.push(playerScore)
+
         highScores.sort( (a,b) => {
             return b.score - a.score;
         } )
@@ -122,8 +230,14 @@ const spaceLaser = {
                 //allow start button to start the game only if the input field has value > 0 or < 9 
             if (spaceLaser.$nameInput.val().length > 0  && spaceLaser.$nameInput.val().length < 9) {
                 if (spaceLaser.soundOn == true){
-                    smoothJazz.pause();
-                    countDown.play();
+                    if (lightModeBtn.style.display == 'block') {
+                        darkAmbience.pause();
+                        countDown.play()
+                    } else {
+                        smoothJazz.pause();
+                        countDown.play();
+                    }
+                    
                 }
                 spaceLaser.switchScreen('#game_countdown_screen');  
                 spaceLaser.isRunning = true;
@@ -138,7 +252,8 @@ const spaceLaser = {
              
             $('#instructions-btn').on('click',() => {
                 $('#high_scores') .attr('style', 'display:none'); 
-                $('#controls') .attr('style', 'display:none'); 
+                $('#controls') .attr('style', 'display:none');
+                $('#credits').css('display','none');  
                 $('#instructions') .attr('style', 'display:');
                 $('#high-scores-btn').removeClass('load')
             })
@@ -146,20 +261,34 @@ const spaceLaser = {
             $('#controls-btn').on('click', () => {
                 $('#high_scores') .attr('style', 'display:none');
                 $('#instructions').css('display','none'); 
+                $('#credits').css('display','none'); 
                 $('#controls').css('display','block'); 
+                $('#high-scores-btn').removeClass('load')
+            })
+            $('#credits-btn').on('click', () => {
+                $('#high_scores') .attr('style', 'display:none');
+                $('#instructions').css('display','none');
+                $('#controls') .attr('style', 'display:none'); 
+                $('#credits').css('display','block'); 
                 $('#high-scores-btn').removeClass('load')
             })
 
             $('#high-scores-btn').on('click', () => {
                 $('#controls') .attr('style', 'display:none');
-                $('#instructions').css('display','none'); 
+                $('#instructions').css('display','none');
+                $('#credits').css('display','none');  
                 $('#high_scores').css('display','block'); 
             })
 
             $('#play_button').on('click', () => {
                 spaceLaser.soundOn = true;
                 if (spaceLaser.soundOn == true){
-                    smoothJazz.play()
+                    if (lightModeBtn.style.display == 'block') {
+                        darkAmbience.play();
+                    } else {
+                        smoothJazz.play()
+                    }
+                    
                 }
                 $('#pause_button').css('display','block'); 
                 $('#play_button').css('display','none'); 
@@ -168,7 +297,11 @@ const spaceLaser = {
             $('#pause_button').on('click', () => {
                 spaceLaser.soundOn = false;
                 if (spaceLaser.soundOn == false){
-                    smoothJazz.pause()
+                    if (lightModeBtn.style.display == 'block') {
+                        darkAmbience.pause();
+                    } else {
+                        smoothJazz.pause()
+                    }
                 }
                 $('#pause_button').css('display','none'); 
                 $('#play_button').css('display','block'); 
@@ -208,8 +341,14 @@ const spaceLaser = {
 //--------------------------------------------------------------------------------------------
     startGame() {
                 if (spaceLaser.soundOn == true){
-                    smoothJazz.currentTime = 0;
-                    smoothJazz.play();
+                    if (lightModeBtn.style.display == 'block') {
+                        darkAmbience.currentTime = 0;
+                        darkAmbience.play();
+                    } else {
+                        smoothJazz.currentTime = 0;
+                        smoothJazz.play();
+                    }
+                    
                 }
             spaceLaser.switchScreen('#game_on_screen');
             spaceLaser.resetGameBoard();
@@ -231,8 +370,14 @@ const spaceLaser = {
     gameLoop() {
 
         if (spaceLaser.isRunning == true) {
-            ctx.fillStyle = "#D0A380";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            if (lightModeBtn.style.display == 'block') {
+                ctx.fillStyle = "black";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            } else {
+                ctx.fillStyle = "#D0A380";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+            
             bulletController.draw(ctx); 
             player.draw(ctx);  
             enemyController.draw(ctx);  
@@ -257,13 +402,22 @@ const spaceLaser = {
 //--------------------------------------------------------------------------------------------
     scorePoints() {
         if (spaceLaser.isRunning == true) {
-
-            ctx.font = "16px 'Press Start 2P'";
-            ctx.fillStyle = "black";
-            ctx.fillText("Score: "+spaceLaser.score, 15, 535);
-            ctx.font = "16px 'Press Start 2P'";
-            ctx.fillStyle = "black";
-            ctx.fillText(""+spaceLaser.playerName, 300, 535);
+            if (lightModeBtn.style.display == 'block'){
+                ctx.font = "16px 'Press Start 2P'";
+                ctx.fillStyle = "white";
+                ctx.fillText("Score: "+spaceLaser.score, 15, 535);
+                ctx.font = "16px 'Press Start 2P'";
+                ctx.fillStyle = "white";
+                ctx.fillText(""+spaceLaser.playerName, 300, 535);
+            }else {
+                ctx.font = "16px 'Press Start 2P'";
+                ctx.fillStyle = "black";
+                ctx.fillText("Score: "+spaceLaser.score, 15, 535);
+                ctx.font = "16px 'Press Start 2P'";
+                ctx.fillStyle = "black";
+                ctx.fillText(""+spaceLaser.playerName, 300, 535); 
+            }
+            
         }
     },
 
@@ -333,9 +487,19 @@ const spaceLaser = {
             $('#final_score').text('Score: '+spaceLaser.score+' points!')
         }
 
-
-        $('#pause_button').css('display','none'); 
-        $('#play_button').css('display','block');
+        if (spaceLaser.soundOn == true){
+            if (lightModeBtn.style.display == 'block') {
+                darkAmbience.play();
+            } else {
+                smoothJazz.play();
+            }
+            
+            $('#pause_button').css('display','block'); 
+            $('#play_button').css('display','none');
+        } 
+        //   else if (spaceLaser.soundOn == true){}
+        // $('#pause_button').css('display','none'); 
+        // $('#play_button').css('display','block');
         
     // play again method triggered by 'click'----------------
     // re triggers countdown screen -------------------------
@@ -344,9 +508,16 @@ const spaceLaser = {
         $('#play_again').on('click', () => {
             spaceLaser.isRunning = true;
             if (spaceLaser.soundOn == true){
-                smoothJazz.pause();
-                countDown.currentTime = 0;
-                countDown.play();
+                if (lightModeBtn.style.display == 'block') {
+                    darkAmbience.pause();
+                    countDown.currentTime = 0;
+                    countDown.play();
+                } else {
+                    smoothJazz.pause();
+                    countDown.currentTime = 0;
+                    countDown.play();
+                }
+                
             }
 
             clearInterval(spawnLoopInterval);
@@ -360,7 +531,12 @@ const spaceLaser = {
     // ------------------------------------------------------
         $('#quit').on('click', () => {
             if (spaceLaser.soundOn == true){
-                smoothJazz.play();
+                if (lightModeBtn.style.display == 'block') {
+                    darkAmbience.play();
+                } else {
+                    smoothJazz.play();
+                }
+                
             }
             
             spaceLaser.switchScreen('#splash_screen');
@@ -393,7 +569,7 @@ class Player {
     constructor(x, y, bulletController) {
         this.x = x,
         this.y = y,
-        this.color = 'orange',
+        this.color = 'black'
         this.bulletController = bulletController,
         this.width = 40,
         this.height = 40,
@@ -405,10 +581,17 @@ class Player {
 
     //player draw method-------------------------------------------
     //-------------------------------------------------------------
+    
+
     draw(ctx) {
         this.move();
         this.shoot();
-        ctx.drawImage(rol,this.x, this.y, this.width, this.height);
+
+        if (lightModeBtn.style.display == 'block'){
+            ctx.drawImage(rolDark,this.x, this.y, this.width, this.height);
+        }else {
+            ctx.drawImage(rol,this.x, this.y, this.width, this.height);
+        }
     }
     //player collideWith method------------------------------------
     //-------------------------------------------------------------
@@ -422,14 +605,29 @@ class Player {
                 
                 //player contact with enemy triggers
                     if (spaceLaser.soundOn == true){
-                        smoothJazz.pause();
-                        deadSound.play();
+                        if (lightModeBtn.style.display == 'block') {
+                            darkAmbience.pause();
+                            deadSound.play();
+                        } else {
+                            smoothJazz.pause();
+                            deadSound.play();
+                        }
+                        
                     }
                 
-                //color over player image and then draw player dead image   
-                ctx.fillStyle = '#D0A380';
-                ctx.fillRect(this.x, this.y, this.width, this.height);
-                ctx.drawImage(dead,this.x, this.y, this.width, this.height);
+                //color over player image and then draw player dead image 
+                
+                if (lightModeBtn.style.display == 'block'){
+                    ctx.fillStyle = 'black';
+                    ctx.fillRect(this.x, this.y, this.width, this.height);
+                    ctx.drawImage(deadDark,this.x, this.y, this.width, this.height);
+                }else {
+                    ctx.fillStyle = '#D0A380';
+                    ctx.fillRect(this.x, this.y, this.width, this.height);
+                    ctx.drawImage(dead,this.x, this.y, this.width, this.height);
+                }
+                
+                
                 return true;
             }
             return false;
@@ -585,9 +783,13 @@ class Bullet {
     }
 
     draw(ctx) {
-        // fillStyle specifies color, gradient or pattern to be used inside of a shape 
-        ctx.drawImage(ghost,this.x, this.y, this.width, this.height);
-        // ctx.fillStyle = this.color;
+        // fillStyle specifies color, gradient or pattern to be used inside of a shape
+
+        if (lightModeBtn.style.display == 'block'){
+            ctx.drawImage(ghostDark,this.x, this.y, this.width, this.height);
+        }else {
+            ctx.drawImage(ghost,this.x, this.y, this.width, this.height);
+        }
         // this "-=" is what moves the bullet up the screen
         this.y -= this.speed;
         // fillRect colors in the bullet
@@ -666,7 +868,12 @@ class Enemy {
 
     draw(ctx) {
         // fillStyle specifies color, gradient or pattern to be used inside of a shape 
-        ctx.drawImage(bomb,this.x, this.y, this.width, this.height);
+
+        if (lightModeBtn.style.display == 'block'){
+            ctx.drawImage(bombDark,this.x, this.y, this.width, this.height);
+        }else {
+            ctx.drawImage(bomb,this.x, this.y, this.width, this.height);
+        }
         // ctx.fillStyle = this.color;
         // this moves the enemy down the screen
         this.y += this.speed;
@@ -698,6 +905,7 @@ $(document).ready(() => {
 
     // adds an underline to the highhscore menu which is shown first on splash screen
     $('#high-scores-btn').addClass('load')
+    
 
     // loads highscores & coresponding names from local storage array and returns them as <li>'s
     highScoresName.innerHTML = highScores.map(playerScore => {
@@ -708,10 +916,16 @@ $(document).ready(() => {
     }).join("");
 
     // music is initialized as off.  Event listeners on play and pause buttons to start and stop game music. 
+
     $('#play_button').on('click', () => {
         spaceLaser.soundOn = true;
         if (spaceLaser.soundOn == true){
-            smoothJazz.play()
+            if (lightModeBtn.style.display == 'block') {
+                darkAmbience.play();
+            } else {
+                smoothJazz.play()
+            }
+            
         }
         $('#pause_button').css('display','block'); 
         $('#play_button').css('display','none'); 
@@ -720,7 +934,11 @@ $(document).ready(() => {
     $('#pause_button').on('click', () => {
         spaceLaser.soundOn = false;
         if (spaceLaser.soundOn == false){
-            smoothJazz.pause()
+            if (lightModeBtn.style.display == 'block') {
+                darkAmbience.pause();
+            } else {
+                smoothJazz.pause()
+            }
         }
         $('#pause_button').css('display','none'); 
         $('#play_button').css('display','block'); 

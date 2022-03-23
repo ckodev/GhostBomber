@@ -20,23 +20,32 @@ body {
     background-color: #A25D34;
     padding: 0;
     margin: 0;
-    
-   
-    
+}
+body.dark {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Press Start 2P', cursive;
+    color: white;
+    background-color: rgb(37, 37, 37);
+    padding: 0;
+    margin: 0;
 }
 
 h1 {
     font-size: 2.5rem;
-    padding: .5rem;
+    padding: .7rem;
     margin: 0;
-    color: black;
+    margin-top: .5rem;
+    
     margin-right: 165px;
 }
 
 h2,
 h3 {
     text-align: center;
-    color: black;
+    
 }
 
 #splash_screen {
@@ -51,6 +60,18 @@ h3 {
     width: 450px;
     height: 550px;
 }
+#splash_screen.dark {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    border: 2px solid white;
+    border-radius: 10px;
+    width: 450px;
+    height: 550px;
+}
 #game_countdown_screen {
     position: relative;
     display: flex;
@@ -59,6 +80,19 @@ h3 {
     justify-content: center;
     background-color: #D0A380;
     border: 2px solid black;
+    border-radius: 10px;
+    width: 450px;
+    height: 550px;
+}
+
+#game_countdown_screen.dark {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    border: 2px solid white;
     border-radius: 10px;
     width: 450px;
     height: 550px;
@@ -80,6 +114,18 @@ h3 {
     width: 450px;
     height: 550px;
 }
+#game_over_screen.dark {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    border: 2px solid white;
+    border-radius: 10px;
+    width: 450px;
+    height: 550px;
+}
 
 .game-over-wrapper {
 
@@ -90,6 +136,10 @@ h3 {
 
 #game {
     border: 2px solid black;
+    border-radius: 10px;
+}
+#game.dark {
+    border: 2px solid white;
     border-radius: 10px;
 }
 
@@ -108,6 +158,65 @@ button {
     font-size: .75rem;
     outline: none;
 }
+
+#start_button.dark {
+    color: white;
+    background-color: black;
+    border: 1px solid white;
+
+}
+#start_button.dark:hover {
+    color: black;
+    background-color: rgb(124, 255, 124);
+    border-bottom: 2px solid white;
+    border: 1px solid black;
+}
+#start_button.dark:focus {
+    color: black;
+    background-color: rgb(124, 255, 124);
+    border-bottom: 2px solid white;
+    border: 1px solid black;
+}
+#play_again.dark {
+    color: white;
+    background-color: black;
+    border: 1px solid white;
+
+}
+#play_again.dark:hover {
+    color: black;
+    background-color: rgb(124, 255, 124);
+    border-bottom: 2px solid black;
+    border: 1px solid black;
+}
+#play_again.dark:focus {
+    color: black;
+    background-color: rgb(124, 255, 124);
+    border-bottom: 2px solid white;
+    border: 1px solid black;
+}
+
+#quit.dark {
+    color: white;
+    background-color: black;
+    border: 1px solid white;
+
+}
+#quit.dark:hover {
+    color: black;
+    background-color: rgb(124, 255, 124);
+    border-bottom: 2px solid white;
+    border: 1px solid black;
+}
+#quit.dark:focus {
+    color: black;
+    background-color: rgb(124, 255, 124);
+    border-bottom: 2px solid white;
+    border: 1px solid black;
+}
+
+
+
 button:hover {
     background-color: #A25D34;
     border-bottom: 2px solid black;
@@ -119,10 +228,43 @@ button:focus {
     border-right: 2px solid black;
 }
 
-.menu-button {
+.menu-button1 {
     background: none;
     border: none;
 }
+.menu-button1.dark {
+    color: white;
+    background: none;
+    border: none;
+}
+.menu-button2 {
+    background: none;
+    border: none;
+}
+.menu-button2.dark {
+    color: white;
+    background: none;
+    border: none;
+}
+.menu-button3 {
+    background: none;
+    border: none;
+}
+.menu-button3.dark {
+    color: white;
+    background: none;
+    border: none;
+}
+.menu-button4 {
+    background: none;
+    border: none;
+}
+.menu-button4.dark {
+    color: white;
+    background: none;
+    border: none;
+}
+
 
 .menu-button-wrapper {
     position: absolute;
@@ -130,40 +272,43 @@ button:focus {
     left: 0;
     display: flex;
     justify-content: center;
-    width: 450px;
-    
+    width: 450px;   
 }
+
+
 #instructions-btn {
-    /* position: absolute;
-    top:15px;
-    left: 210px; */
-    font-size: .6rem;
+    font-size: .5rem;
     padding: 0;
     min-width: 0;
     border-right: none;
-    margin-left: 1.5rem;
+    margin-left: 1.2rem;
     
 }
+
 #controls-btn {
-    /* position: absolute;
-    top:15px;
-    left: 345px; */
-    font-size: .6rem;
+    font-size: .5rem;
     padding: 0;
     min-width: 0;
     border-right: none;
-    margin-left: 1.5rem;
+    margin-left: 1.2rem;
 }
 #high-scores-btn {
-    /* position: absolute;
-    top:15px;
-    left: 75px; */
-    font-size: .6rem;
+   
+    font-size: .5rem;
     padding: 0;
     min-width: 0;
-    border-right: none;
-    
+    border-right: none;  
 }
+
+#credits-btn {
+   
+    font-size: .5rem;
+    padding: 0;
+    min-width: 0;
+    border-right: none; 
+    margin-left: 1.2rem; 
+}
+
 #instructions-btn:hover {
     border: none;
     outline: none;
@@ -171,11 +316,40 @@ button:focus {
     border-bottom: 2px solid black;
     border-radius: 0;
 }
+#instructions-btn.dark:hover {
+    border: none;
+    outline: none;
+    background: none;
+    border-bottom: 2px solid white;
+    border-radius: 0;
+}
+
 #controls-btn:hover {
     border: none;
     outline: none;
     background: none;
     border-bottom: 2px solid black;
+    border-radius: 0;
+}
+#controls-btn.dark:hover {
+    border: none;
+    outline: none;
+    background: none;
+    border-bottom: 2px solid white;
+    border-radius: 0;
+}
+#credits-btn:hover {
+    border: none;
+    outline: none;
+    background: none;
+    border-bottom: 2px solid black;
+    border-radius: 0;
+}
+#credits-btn.dark:hover {
+    border: none;
+    outline: none;
+    background: none;
+    border-bottom: 2px solid white;
     border-radius: 0;
 }
 #high-scores-btn:hover {
@@ -185,23 +359,60 @@ button:focus {
     border-bottom: 2px solid black;
     border-radius: 0;
 }
+#high-scores-btn.dark:hover {
+    border: none;
+    outline: none;
+    background: none;
+    border-bottom: 2px solid white;
+    border-radius: 0;
+}
 
 #controls {
     text-align: center;
     line-height: 2rem;
 }
 
-.load {
-    border-bottom: 2px solid black;
+
+#instructions-btn:focus {
+    font-size: .6rem;
     border-radius: 0;
 }
-#instructions-btn:focus {
+#instructions-btn.dark:focus {
+    border-bottom: 2px solid white;
     border-radius: 0;
 }
 #controls-btn:focus {
+    font-size: .6rem;
+    border-radius: 0;
+}
+#controls-btn.dark:focus {
+    border-bottom: 2px solid white;
     border-radius: 0;
 }
 #high-scores-btn:focus {
+    font-size: .6rem;
+    border-radius: 0;
+}
+#high-scores-btn.dark:focus {
+    border-bottom: 2px solid white;
+    border-radius: 0;
+}
+#credits-btn:focus {
+    font-size: .6rem;
+    border-radius: 0;
+}
+#credits-btn.dark:focus {
+    border-bottom: 2px solid white;
+    border-radius: 0;
+}
+.load {
+    font-size: .6rem;
+    border-bottom: 2px solid black;
+    border-radius: 0;
+}
+
+.load.dark {
+    border-bottom: 2px solid white;
     border-radius: 0;
 }
 
@@ -227,6 +438,31 @@ input {
     text-align: center;
     outline: none;
 }
+input.dark {
+    border: none;
+    color: white;
+    background-color: black;
+    border: 1px solid white;
+    border-radius: 5px;
+    width: 8rem;
+    padding: .5rem;
+    font-family: 'Press Start 2P', cursive;
+    line-height: 1.5rem;
+    font-size: .75rem;
+    text-align: center;
+    outline: none;
+}
+
+input:focus {
+    border-bottom: 2px solid black;
+    border-right: 2px solid black;
+    border: 1px solid black;
+}
+input.dark:focus {
+    color:black;
+    background-color: rgb(124, 255, 124);
+}
+
 
 #name_input {
     position: absolute;
@@ -250,10 +486,8 @@ input {
     left: 230px;
     top: 475px;
 }
-input:focus {
-    border-bottom: 2px solid black;
-    border-right: 2px solid black;
-}
+
+
 
 .high_scores_wrapper {
     display: flex;
@@ -278,25 +512,44 @@ input:focus {
     
 }
 
-#music_symbol {
-    position: absolute;
-    width: 20px;
-    top:67px;
-    left: 400px;
-}
+
 #play_button {
     position: absolute;
-    width: 15px;
+    width: 22px;
     cursor: pointer;
-    top:68px;
-    left: 370px;
+    top:80px;
+    left: 380px;
 }
 
 #pause_button {
     display: none;
     position: absolute;
-    width: 15px;
+    width: 24px;
     cursor: pointer;
-    top:66px;
-    left: 370px;
+    top:80px;
+    left: 380px;
 }
+
+#sun_button {
+    display: none;
+    position: absolute;
+    width: 20px;
+    top:80px;
+    left: 415px;
+}
+#sun_button.dark{
+    color: white;
+    display: none;
+    position: absolute;
+    width: 20px;
+    top:80px;
+    left: 415px;
+}
+
+#moon_button {
+    position: absolute;
+    width: 20px;
+    top:80px;
+    left: 415px;
+}
+

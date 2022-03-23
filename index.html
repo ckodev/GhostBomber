@@ -14,34 +14,66 @@
     <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
     <!-- font awesome kit -->
     <script src="https://kit.fontawesome.com/7dbc5a702c.js" crossorigin="anonymous"></script>
+    <!-- favicon Bomb-fav -->
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="bomb-fav/apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="bomb-fav/apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="bomb-fav/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="bomb-fav/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="60x60" href="bomb-fav/apple-touch-icon-60x60.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="bomb-fav/apple-touch-icon-120x120.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="bomb-fav/apple-touch-icon-76x76.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="bomb-fav/apple-touch-icon-152x152.png" />
+    <link rel="icon" type="image/png" href="bomb-fav/favicon-196x196.png" sizes="196x196" />
+    <link rel="icon" type="image/png" href="bomb-fav/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/png" href="bomb-fav/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="bomb-fav/favicon-16x16.png" sizes="16x16" />
+    <link rel="icon" type="image/png" href="bomb-fav/favicon-128.png" sizes="128x128" />
+    <meta name="application-name" content="&nbsp;"/>
+    <meta name="msapplication-TileColor" content="#FFFFFF" />
+    <meta name="msapplication-TileImage" content="mstile-144x144.png" />
+    <meta name="msapplication-square70x70logo" content="mstile-70x70.png" />
+    <meta name="msapplication-square150x150logo" content="mstile-150x150.png" />
+    <meta name="msapplication-wide310x150logo" content="mstile-310x150.png" />
+    <meta name="msapplication-square310x310logo" content="mstile-310x310.png" />
     <!-- game title  -->
     <title>Ghost Bomber</title>
 </head>
 <body>
 
-    
     <div class="header-wrapper">
+
         <h1>Ghost <br>Bomber</h1>
+
+        <!-- play button -->
         <div>
-            <img id="music_symbol"
-                 src="images/music-solid.svg">
-          </div>
+            <svg id="pause_button" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 640 512"><!--! Font Awesome Pro 6.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path path fill="currentColor" d="M412.6 182c-10.28-8.334-25.41-6.867-33.75 3.402c-8.406 10.24-6.906 25.35 3.375 33.74C393.5 228.4 400 241.8 400 255.1c0 14.17-6.5 27.59-17.81 36.83c-10.28 8.396-11.78 23.5-3.375 33.74c4.719 5.806 11.62 8.802 18.56 8.802c5.344 0 10.75-1.779 15.19-5.399C435.1 311.5 448 284.6 448 255.1S435.1 200.4 412.6 182zM473.1 108.2c-10.22-8.334-25.34-6.898-33.78 3.34c-8.406 10.24-6.906 25.35 3.344 33.74C476.6 172.1 496 213.3 496 255.1s-19.44 82.1-53.31 110.7c-10.25 8.396-11.75 23.5-3.344 33.74c4.75 5.775 11.62 8.771 18.56 8.771c5.375 0 10.75-1.779 15.22-5.431C518.2 366.9 544 313 544 255.1S518.2 145 473.1 108.2zM534.4 33.4c-10.22-8.334-25.34-6.867-33.78 3.34c-8.406 10.24-6.906 25.35 3.344 33.74C559.9 116.3 592 183.9 592 255.1s-32.09 139.7-88.06 185.5c-10.25 8.396-11.75 23.5-3.344 33.74C505.3 481 512.2 484 519.2 484c5.375 0 10.75-1.779 15.22-5.431C601.5 423.6 640 342.5 640 255.1S601.5 88.34 534.4 33.4zM301.2 34.98c-11.5-5.181-25.01-3.076-34.43 5.29L131.8 160.1H48c-26.51 0-48 21.48-48 47.96v95.92c0 26.48 21.49 47.96 48 47.96h83.84l134.9 119.8C272.7 477 280.3 479.8 288 479.8c4.438 0 8.959-.9314 13.16-2.835C312.7 471.8 320 460.4 320 447.9V64.12C320 51.55 312.7 40.13 301.2 34.98z"/></svg>
+        </div>
+            
+        <!-- pause button -->
         <div>
-            <img id="play_button"
-                 src="images/play-solid.svg">
-          </div>
+            <svg id="play_button" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 576 512"><!--! Font Awesome Pro 6.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path path fill="currentColor" d="M301.2 34.85c-11.5-5.188-25.02-3.122-34.44 5.253L131.8 160H48c-26.51 0-48 21.49-48 47.1v95.1c0 26.51 21.49 47.1 48 47.1h83.84l134.9 119.9c5.984 5.312 13.58 8.094 21.26 8.094c4.438 0 8.972-.9375 13.17-2.844c11.5-5.156 18.82-16.56 18.82-29.16V64C319.1 51.41 312.7 40 301.2 34.85zM513.9 255.1l47.03-47.03c9.375-9.375 9.375-24.56 0-33.94s-24.56-9.375-33.94 0L480 222.1L432.1 175c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94l47.03 47.03l-47.03 47.03c-9.375 9.375-9.375 24.56 0 33.94c9.373 9.373 24.56 9.381 33.94 0L480 289.9l47.03 47.03c9.373 9.373 24.56 9.381 33.94 0c9.375-9.375 9.375-24.56 0-33.94L513.9 255.1z"/></svg>
+        </div>
+
+        <!-- light mode button -->
         <div>
-            <img id="pause_button"
-                 src="images/pause-solid.svg">
-          </div>
+            <svg id="sun_button" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><!--! Font Awesome Pro 6.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+        </div>
+
+        <!-- dark mode button -->
+        <div>
+            <svg id="moon_button" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><!--! Font Awesome Pro 6.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+        </div>
     </div>
+
+
     <div id="splash_screen" class="screen">
         <div class="splash-container">
 
-            <div class="menu-button-wrapper">
-                <button class="menu-button" id="high-scores-btn" type="submit">High Scores</button>
-                <button class="menu-button" id="instructions-btn" type="submit">Instructions</button>
-                <button class="menu-button" id="controls-btn" type="submit">Controls</button>
+            <div class="menu-button-wrapper" id="menu-button-wrapper">
+                <button class="menu-button1" id="high-scores-btn" type="submit">High Scores</button>
+                <button class="menu-button2" id="instructions-btn" type="submit">Instructions</button>
+                <button class="menu-button3" id="controls-btn" type="submit">Controls</button>
+                <button class="menu-button4" id="credits-btn" type="submit">Credits</button>
             </div>
 
             <section id="high_scores" style="display:block">
@@ -69,10 +101,19 @@
                 <p>Shoot: <br>Space bar</p>
             </section>
 
-                <div class="button-wrapper">
-                    <input id="name_input" type="text" placeholder="EnterName">
-                    <button id="start_button" type="submit">Start</button>
-                </div>
+            <section id="credits" style="display:none">
+                <h2>Credits</h2>
+                <p><a href="https://freesound.org/people/KRISTIANKULTA/sounds/368309/">Dark Theme Ambience</a></p>
+                <p><a href="https://freesound.org/people/Migfus20/sounds/564001/">Light Theme Ambience</a></p>
+                <p><a href="https://freesound.org/people/Volvion/sounds/609783/">Ghost Sound</a></p>
+                <p><a href="https://sfxr.me/">Point Scored Sound</a></p>
+                
+            </section>
+
+            <div class="button-wrapper">
+                <input id="name_input" type="text" placeholder="EnterName">
+                <button id="start_button" type="submit">Start</button>
+            </div>
             
         </div>
     </div>   
@@ -81,22 +122,56 @@
     </div>
     <div id="game_on_screen" class="screen">
         <canvas id="game"></canvas>
+
+        <!-- player charactor alive -->
+        <!-- light mode -->
         <div style="display:none;">
-            <img id="rol"
-                 src="images/face-rolling-eyes-regular.svg">
-          </div>
+            <img    id="rol"
+                    src="images/face-rolling-eyes-regular.svg">
+        </div>
+        <!-- dark mode -->
         <div style="display:none;">
-            <img id="dead"
-                 src="images/face-dizzy-regular.svg">
-          </div>
-          <div style="display:none;">
-            <img id="ghost"
-                 src="images/ghost-solid.svg">
-          </div>
-          <div style="display:none;">
-            <img id="bomb"
-                 src="images/bomb-solid.svg">
-          </div>
+            <img    id="rol_dark"
+                    src="images/player.png">
+        </div>
+
+
+        <!-- player charactor dead -->
+        <!-- light mode -->
+        <div style="display:none;">
+            <img    id="dead"
+                    src="images/face-dizzy-regular.svg">
+         </div>
+         <!-- dark mode -->
+        <div style="display:none;">
+            <img    id="dead_dark"
+                    src="images/dead.png">
+         </div>
+
+         <!-- ghost projectile -->
+         <!-- light mode -->
+        <div style="display:none;">
+            <img    id="ghost"
+                    src="images/ghost-solid.svg">
+        </div>
+        <!-- dark mode -->
+        <div style="display:none;">
+            <img    id="ghost_dark"
+                    src="images/ghost-dark.png">
+        </div>
+
+        <!-- enemy charactor -->
+        <!-- light mode -->
+        <div style="display:none;">
+            <img    id="bomb"
+                    src="images/bomb-solid.svg">
+        </div>
+        <!-- dark mode -->
+        <div style="display:none;">
+            <img    id="bomb_dark"
+                    src="images/bomb-dark.png">
+        </div>
+
     </div>
     <div id="game_over_screen" class="screen">
         <div class="game-over-wrapper">
@@ -110,11 +185,12 @@
     </div>
     
     <audio id="smooth_jazz"><source src="audio/smooth-jazz.mp3" type="audio/mp3"></audio>
+    <audio id="dark_ambience"><source src="audio/spooky-music-3.mp3" type="audio/mp3"></audio>
     <audio id="dead_audio"><source src="audio/game-over.wav" type="audio/wav"></audio>
     <audio id="shoot_audio"><source src="audio/ghost-sound-shoot.mp3" type="audio/mp3"></audio>
     <audio id="321_audio"><source src="audio/3-2-1.wav" type="audio/wav"></audio>
     <audio id="hit_audio"><source src="audio/pickupCoin (1).wav" type="audio/wav"></audio>
-    
+
     <!-- link to script  -->
     <script src="script.js"></script>
 </body>
