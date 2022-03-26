@@ -21,11 +21,10 @@ const deadDark = document.getElementById('dead_dark');
 const instructions = document.getElementById('instructions');
 const controls = document.getElementById('controls');
 
-//variable for highscore method
+//variables for highscore method
 const mostRecentScore = localStorage.getItem('mostRecentScore');
 const highScoresName = document.getElementById('high_scores_name');
 const highScoresScore = document.getElementById('high_scores_score');
-
 const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
 console.log(highScores);
 const MAX_HIGH_SCORES = 10;
@@ -426,7 +425,6 @@ const spaceLaser = {
     enemySpawnLoop() {
         if (spaceLaser.isRunning == true) 
         {
-            // spaceLaser.enemySpeed = spaceLaser.enemySpeed;
             const enemySpawn = Math.random();
             if (enemySpawn > 0.3) {
                 const xPos = Math.floor(Math.random()*350) + 40;
@@ -452,8 +450,6 @@ const spaceLaser = {
 // when player "dies" there is a 3 sec pause before game over screen appears------------------ 
 
     hideGameScreen () {
-        
-        
         spaceLaser.switchScreen('#game_over_screen');
     },
 
@@ -497,9 +493,7 @@ const spaceLaser = {
             $('#pause_button').css('display','block'); 
             $('#play_button').css('display','none');
         } 
-        //   else if (spaceLaser.soundOn == true){}
-        // $('#pause_button').css('display','none'); 
-        // $('#play_button').css('display','block');
+        
         
     // play again method triggered by 'click'----------------
     // re triggers countdown screen -------------------------
@@ -527,7 +521,7 @@ const spaceLaser = {
         })
 
     // quit game method triggered by 'click'-----------------
-    // send player back to splash screen --------------------
+    // sends player back to splash screen --------------------
     // ------------------------------------------------------
         $('#quit').on('click', () => {
             if (spaceLaser.soundOn == true){
@@ -557,7 +551,6 @@ const spaceLaser = {
         spaceLaser.gameDifficulty = 1; 
         spaceLaser.enemySpeed = 2;
         spaceLaser.enemyDelay = 3;
-        console.log('resetting game board');
     }
 }
 
