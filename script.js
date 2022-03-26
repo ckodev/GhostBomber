@@ -21,14 +21,6 @@ const deadDark = document.getElementById('dead_dark');
 const instructions = document.getElementById('instructions');
 const controls = document.getElementById('controls');
 
-//variables for highscore method
-const mostRecentScore = localStorage.getItem('mostRecentScore');
-const highScoresName = document.getElementById('high_scores_name');
-const highScoresScore = document.getElementById('high_scores_score');
-const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
-console.log(highScores);
-const MAX_HIGH_SCORES = 10;
-
 // audio variables 
 const darkAmbience = document.getElementById('dark_ambience');
 const smoothJazz = document.getElementById('smooth_jazz');
@@ -48,6 +40,9 @@ darkAmbience.preload = true;
 darkAmbience.loop = true;
 
 
+
+// Light & dark Mode ---------------------------------------
+// ---------------------------------------------------------
 
 // darkmode button variable 
 const darkModeBtn = document.getElementById('moon_button');
@@ -144,6 +139,15 @@ function lightMode() {
     credits.classList.remove('dark');
 }
 
+//variables for highscore method
+// const mostRecentScore = localStorage.getItem('mostRecentScore');
+const highScoresName = document.getElementById('high_scores_name');
+const highScoresScore = document.getElementById('high_scores_score');
+const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+const MAX_HIGH_SCORES = 10;
+
+
+
 
 // Game object-------------------------------------------------------------------
 //-------------------------------------------------------------------------------
@@ -159,10 +163,47 @@ const spaceLaser = {
     highScore: [],
     soundOn: false, 
     
+    // saves the high scores in local storage 
+    saveHighScore() {
 
+        // the player score object which holds and sets the name value pairs that will be pushed onto the highscores array each time a player completes a round of the game
+        const playerScore = {
+            score: spaceLaser.score,
+            name: spaceLaser.playerName,
+        }
 
+        // pushes the name value pairs set by the player in the playerScore object into the highScores array to be sorted and displayed 
+        highScores.push(playerScore)
 
+        // sorts the array based on score values. 
+        // If B score < A score it comes after it in the high scores array.  Basically if B - A returns a negative integer then it places it after the array item its being compared with and vice versa. 
+        highScores.sort( (a,b) => {
+            return b.score - a.score;
+        } )
 
+        // removes item 11 from the array. highscores list only stores top 10. 
+        highScores.splice(10);
+
+        
+        // set a cookie for stringified highscores array
+        document.cookie = "highScores="+ JSON.stringify(highScores);
+        
+        
+        // setting the local storage of stringified highscores array
+        localStorage.setItem('highScores', JSON.stringify(highScores))
+
+        // setting the HTML display of the hischores Name 
+        highScoresName.innerHTML = highScores.map(playerScore => {
+            return `<li class="high-scores" >${playerScore.name}</li>`
+        }).join("");
+        highScoresScore.innerHTML = highScores.map(playerScore => {
+            return `<li class="high-scores" >${playerScore.score}</li>`
+        }).join("");
+    },
+
+    
+
+    // plays the ghost soundfx when player shoots weapon
     shootSound() {
         if (spaceLaser.soundOn ==true){
             shootSound.volume = 0.1;
@@ -171,30 +212,9 @@ const spaceLaser = {
         } 
     },
 
-    saveHighScore() {
-        
-        const playerScore = {
-            score: spaceLaser.score,
-            name: spaceLaser.playerName,
-        }
-
-        highScores.push(playerScore)
-
-        highScores.sort( (a,b) => {
-            return b.score - a.score;
-        } )
-        highScores.splice(10);
-        localStorage.setItem('highScores', JSON.stringify(highScores))
-        highScoresName.innerHTML = highScores.map(playerScore => {
-            return `<li class="high-scores" >${playerScore.name}</li>`
-        }).join("");
-        highScoresScore.innerHTML = highScores.map(playerScore => {
-            return `<li class="high-scores" >${playerScore.score}</li>`
-        }).join("");
-    },
-    
+    // stops countdown soundfx and runs start ghame
+    // triggered from switchSCreen(game_countdown_screen)  
     delayStart() {
-     
         spaceLaser.startGame();
         countDown.pause();
         countDown.currentTime = 0;
@@ -223,10 +243,9 @@ const spaceLaser = {
     //------------------------------------------------------------------------------- 
         if (spaceLaser.currentScreen == '#splash_screen') {
 
-            
-            
+            //allows start button to start the game only if the input field has value > 0 or < 9
+            // triggers switchScreen('#game_countdown_screen') 
             $('#start_button').on('click', () => {
-                //allow start button to start the game only if the input field has value > 0 or < 9 
             if (spaceLaser.$nameInput.val().length > 0  && spaceLaser.$nameInput.val().length < 9) {
                 if (spaceLaser.soundOn == true){
                     if (lightModeBtn.style.display == 'block') {
@@ -249,6 +268,8 @@ const spaceLaser = {
         
             }),
              
+            // splash screen menu options buttons display----------------
+            // ----------------------------------------------------------
             $('#instructions-btn').on('click',() => {
                 $('#high_scores') .attr('style', 'display:none'); 
                 $('#controls') .attr('style', 'display:none');
@@ -278,6 +299,10 @@ const spaceLaser = {
                 $('#credits').css('display','none');  
                 $('#high_scores').css('display','block'); 
             })
+
+
+            // splash screen audio controls----------------
+            // --------------------------------------------
 
             $('#play_button').on('click', () => {
                 spaceLaser.soundOn = true;
@@ -425,6 +450,7 @@ const spaceLaser = {
     enemySpawnLoop() {
         if (spaceLaser.isRunning == true) 
         {
+            // spaceLaser.enemySpeed = spaceLaser.enemySpeed;
             const enemySpawn = Math.random();
             if (enemySpawn > 0.3) {
                 const xPos = Math.floor(Math.random()*350) + 40;
@@ -438,7 +464,7 @@ const spaceLaser = {
     gameOver() {
         window.setTimeout(spaceLaser.hideGameScreen, 3000);
         spaceLaser.isRunning = false;
-
+        spaceLaser.saveHighScore(spaceLaser.score);
         
         clearInterval(spawnLoopInterval);
         clearInterval(gameLoopInterval);
@@ -450,6 +476,8 @@ const spaceLaser = {
 // when player "dies" there is a 3 sec pause before game over screen appears------------------ 
 
     hideGameScreen () {
+
+        
         spaceLaser.switchScreen('#game_over_screen');
     },
 
@@ -457,11 +485,12 @@ const spaceLaser = {
 //--------------------------------------------------------------------------------------------
 
     gameOverScreen() {
-        localStorage.setItem('mostRecentScore', spaceLaser.score);
-        spaceLaser.saveHighScore(spaceLaser.score);
+        
+        // localStorage.setItem('mostRecentScore', spaceLaser.score);
+        
 
-        // personalized message based on score achieved----------------------------------------------------------
-        //-------------------------------------------------------------------------------------------------------
+        // personalized message based on score achieved-------------------------------
+        //----------------------------------------------------------------------------
         if (spaceLaser.score < 50) {
             $('#final_name').text('C\'mon ' + spaceLaser.playerName+'! I expected more from you. ')
             $('#final_score').text('Score: '+spaceLaser.score+' points!')
@@ -493,7 +522,9 @@ const spaceLaser = {
             $('#pause_button').css('display','block'); 
             $('#play_button').css('display','none');
         } 
-        
+        //   else if (spaceLaser.soundOn == true){}
+        // $('#pause_button').css('display','none'); 
+        // $('#play_button').css('display','block');
         
     // play again method triggered by 'click'----------------
     // re triggers countdown screen -------------------------
@@ -521,7 +552,7 @@ const spaceLaser = {
         })
 
     // quit game method triggered by 'click'-----------------
-    // sends player back to splash screen --------------------
+    // send player back to splash screen --------------------
     // ------------------------------------------------------
         $('#quit').on('click', () => {
             if (spaceLaser.soundOn == true){
@@ -529,14 +560,11 @@ const spaceLaser = {
                     darkAmbience.play();
                 } else {
                     smoothJazz.play();
-                }
-                
+                } 
             }
-            
             spaceLaser.switchScreen('#splash_screen');
             spaceLaser.score = 0;
-            spaceLaser.playerName = '';
-            $('#name_input').val('');
+            $('#name_input').val(spaceLaser.playerName);
         })
     },
 
@@ -551,6 +579,7 @@ const spaceLaser = {
         spaceLaser.gameDifficulty = 1; 
         spaceLaser.enemySpeed = 2;
         spaceLaser.enemyDelay = 3;
+        console.log('resetting game board');
     }
 }
 

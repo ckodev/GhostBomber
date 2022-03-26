@@ -477,13 +477,13 @@ input.dark:focus {
 }
 #play_again {
     position: absolute;
-    left: 80px;
+    left: 46px;
     top: 475px;
 }
 
 #quit {
     position: absolute;
-    left: 230px;
+    left: 196px;
     top: 475px;
 }
 
