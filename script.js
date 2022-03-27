@@ -33,6 +33,7 @@ deadSound.volume = 0.5;
 countDown.volume = 0.1;
 hitSound.volume = 0.3;
 smoothJazz.volume = 0.7;
+shootSound.preload = true;
 smoothJazz.preload = true;
 smoothJazz.loop = true;
 darkAmbience.volume = 0.7;
@@ -77,7 +78,7 @@ const credits = document.getElementById('credits-btn');
 //dark mode function 
 function darkMode() {
     
-    if (spaceLaser.soundOn == true) {
+    if (ghostBomber.soundOn == true) {
         smoothJazz.pause();
         smoothJazz.currentTime = 0;
         darkAmbience.play();
@@ -105,12 +106,13 @@ function darkMode() {
     over.classList.add('dark');
     gameOnScreen.classList.add('dark');
     credits.classList.add('dark');
+
     
 }
 //dark mode function
 function lightMode() {
     
-    if (spaceLaser.soundOn == true) {
+    if (ghostBomber.soundOn == true) {
         darkAmbience.pause();
         darkAmbience.currentTime = 0;
         smoothJazz.play();
@@ -137,6 +139,7 @@ function lightMode() {
     over.classList.remove('dark');
     gameOnScreen.classList.remove('dark');
     credits.classList.remove('dark');
+
 }
 
 //variables for highscore method
@@ -151,7 +154,7 @@ const MAX_HIGH_SCORES = 10;
 
 // Game object-------------------------------------------------------------------
 //-------------------------------------------------------------------------------
-const spaceLaser = {
+const ghostBomber = {
     title: 'Space Laser',
     playerName: '',
     score: 0,
@@ -168,8 +171,8 @@ const spaceLaser = {
 
         // the player score object which holds and sets the name value pairs that will be pushed onto the highscores array each time a player completes a round of the game
         const playerScore = {
-            score: spaceLaser.score,
-            name: spaceLaser.playerName,
+            score: ghostBomber.score,
+            name: ghostBomber.playerName,
         }
 
         // pushes the name value pairs set by the player in the playerScore object into the highScores array to be sorted and displayed 
@@ -186,6 +189,7 @@ const spaceLaser = {
 
         
         // set a cookie for stringified highscores array
+        // the goal is to create a highscores list on the server side
         document.cookie = "highScores="+ JSON.stringify(highScores);
         
         
@@ -205,64 +209,59 @@ const spaceLaser = {
 
     // plays the ghost soundfx when player shoots weapon
     shootSound() {
-        if (spaceLaser.soundOn ==true){
+        if (ghostBomber.soundOn == true){
             shootSound.volume = 0.1;
             shootSound.load();
             shootSound.play();
         } 
     },
 
-    // stops countdown soundfx and runs start ghame
-    // triggered from switchSCreen(game_countdown_screen)  
-    delayStart() {
-        spaceLaser.startGame();
-        countDown.pause();
-        countDown.currentTime = 0;
-    },
-
-    
+      
 
 // Switch screen method--------------------------------------------------------------
 //-----------------------------------------------------------------------------------
     switchScreen(newScreen) {
         $('.screen').hide();
         $(newScreen).show();
-        spaceLaser.currentScreen = newScreen;
+        ghostBomber.currentScreen = newScreen;
      
         
-
-    // Game_countdown_screen---------------------------------------------------------
-    //-------------------------------------------------------------------------------
-        if (spaceLaser.currentScreen === '#game_countdown_screen') {
-            window.setTimeout(spaceLaser.delayStart, 2800);
-            $('#pause_button').css('display','none'); 
-            $('#play_button').css('display','none'); 
+        // Game_countdown_screen---------------------------------------------------------
+        //-------------------------------------------------------------------------------
+        if (ghostBomber.currentScreen === '#game_over_screen') {
+            ghostBomber.gameOverScreen();
+            
+        }
+        // Game_countdown_screen---------------------------------------------------------
+        //-------------------------------------------------------------------------------
+        if (ghostBomber.currentScreen === '#game_countdown_screen') {
+            window.setTimeout(ghostBomber.delayStart, 2800);
+            
         }
 
-    // splash_screen-----------------------------------------------------------------
-    //------------------------------------------------------------------------------- 
-        if (spaceLaser.currentScreen == '#splash_screen') {
+        // splash_screen-----------------------------------------------------------------
+        //------------------------------------------------------------------------------- 
+        if (ghostBomber.currentScreen == '#splash_screen') {
 
             //allows start button to start the game only if the input field has value > 0 or < 9
             // triggers switchScreen('#game_countdown_screen') 
             $('#start_button').on('click', () => {
-            if (spaceLaser.$nameInput.val().length > 0  && spaceLaser.$nameInput.val().length < 9) {
-                if (spaceLaser.soundOn == true){
+            if (ghostBomber.$nameInput.val().length > 0  && ghostBomber.$nameInput.val().length < 9) {
+                if (ghostBomber.soundOn == true){
                     if (lightModeBtn.style.display == 'block') {
                         darkAmbience.pause();
                         countDown.play()
                     } else {
                         smoothJazz.pause();
                         countDown.play();
-                    }
-                    
+                    } 
                 }
-                spaceLaser.switchScreen('#game_countdown_screen');  
-                spaceLaser.isRunning = true;
-                spaceLaser.playerName = spaceLaser.$nameInput.val();
-            } else if (spaceLaser.$nameInput.val().length >= 9){ 
+                ghostBomber.switchScreen('#game_countdown_screen');  
+                ghostBomber.isRunning = true;
+                ghostBomber.playerName = ghostBomber.$nameInput.val();
+            } else if (ghostBomber.$nameInput.val().length >= 9){ 
                 alert('your name is too long! 8 charactor max. ');
-            } else  if (spaceLaser.$nameInput.val().length <= 0 ){
+            } else  if (ghostBomber.$nameInput.val().length <= 0 ){
                 alert('Please enter your name!');
             }
         
@@ -304,87 +303,63 @@ const spaceLaser = {
             // splash screen audio controls----------------
             // --------------------------------------------
 
-            $('#play_button').on('click', () => {
-                spaceLaser.soundOn = true;
-                if (spaceLaser.soundOn == true){
-                    if (lightModeBtn.style.display == 'block') {
-                        darkAmbience.play();
-                    } else {
-                        smoothJazz.play()
-                    }
+            // $('#play_button').on('click', () => {
+            //     ghostBomber.soundOn = true;
+            //     if (ghostBomber.soundOn == true){
+            //         if (lightModeBtn.style.display == 'block') {
+            //             darkAmbience.play();
+            //         } else {
+            //             smoothJazz.play()
+            //         }
                     
-                }
-                $('#pause_button').css('display','block'); 
-                $('#play_button').css('display','none'); 
-            })
+            //     }
+            // })
         
-            $('#pause_button').on('click', () => {
-                spaceLaser.soundOn = false;
-                if (spaceLaser.soundOn == false){
-                    if (lightModeBtn.style.display == 'block') {
-                        darkAmbience.pause();
-                    } else {
-                        smoothJazz.pause()
-                    }
-                }
-                $('#pause_button').css('display','none'); 
-                $('#play_button').css('display','block'); 
-            })
+            // $('#pause_button').on('click', () => {
+            //     ghostBomber.soundOn = false;
+            //     if (ghostBomber.soundOn == false){
+            //         if (lightModeBtn.style.display == 'block') {
+            //             darkAmbience.pause();
+            //         } else {
+            //             smoothJazz.pause()
+            //         }
+            //     }  
+            // })
         }
+        
+    
+   
+    },
 
-
-    // Game_on_screen------------------------------------------------------------
-    //---------------------------------------------------------------------------
-        if (spaceLaser.currentScreen == '#game_on_screen') {
-            if (spaceLaser.soundOn == true){
-                $('#pause_button').css('display','block'); 
-                $('#play_button').css('display','none'); 
+    // stops countdown soundfx and runs start game
+    // triggered from switchSCreen(game_countdown_screen)  
+    delayStart() {
+        ghostBomber.startGame();
+        countDown.pause();
+        countDown.currentTime = 0;
+        if (ghostBomber.soundOn == true){
+            if (lightModeBtn.style.display == 'block'){
+                darkAmbience.play();
             } else {
-                $('#pause_button').css('display','none'); 
-                $('#play_button').css('display','block');
+                smoothJazz.play();
             }
-
-            
-        }
-    // Game_over_screen----------------------------------------------------------
-    //---------------------------------------------------------------------------
-        if (spaceLaser.currentScreen == '#game_over_screen' ) {
-            if (spaceLaser.soundOn == true){
-                $('#pause_button').css('display','block'); 
-                $('#play_button').css('display','none'); 
-            } else {
-                $('#pause_button').css('display','none'); 
-                $('#play_button').css('display','block');
-            }
-        spaceLaser.gameOverScreen();
-            
         }
     },
 
 // start game method--------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
     startGame() {
-                if (spaceLaser.soundOn == true){
-                    if (lightModeBtn.style.display == 'block') {
-                        darkAmbience.currentTime = 0;
-                        darkAmbience.play();
-                    } else {
-                        smoothJazz.currentTime = 0;
-                        smoothJazz.play();
-                    }
-                    
-                }
-            spaceLaser.switchScreen('#game_on_screen');
-            spaceLaser.resetGameBoard();
+            ghostBomber.switchScreen('#game_on_screen');
+            ghostBomber.resetGameBoard();
             clearInterval(gameLoopInterval);
             clearInterval(spawnLoopInterval);
             clearInterval(increaseDifficultyInterval);
-            gameLoopInterval = setInterval(spaceLaser.gameLoop, 1000 / 60);
-            spawnLoopInterval = setInterval(spaceLaser.enemySpawnLoop, 300);
+            gameLoopInterval = setInterval(ghostBomber.gameLoop, 1000 / 60);
+            spawnLoopInterval = setInterval(ghostBomber.enemySpawnLoop, 300);
 
             increaseDifficultyInterval = setInterval(() => {
-               spaceLaser.enemySpeed = spaceLaser.enemySpeed * 1.2;
-               spaceLaser.enemyDelay = spaceLaser.enemyDelay/2;
+               ghostBomber.enemySpeed = ghostBomber.enemySpeed * 1.2;
+               ghostBomber.enemyDelay = ghostBomber.enemyDelay/2;
             }, 10000);
 
     },
@@ -393,7 +368,7 @@ const spaceLaser = {
 //--------------------------------------------------------------------------------------------
     gameLoop() {
 
-        if (spaceLaser.isRunning == true) {
+        if (ghostBomber.isRunning == true) {
             if (lightModeBtn.style.display == 'block') {
                 ctx.fillStyle = "black";
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -410,13 +385,13 @@ const spaceLaser = {
                 const index = enemyController.enemies.indexOf(enemy);
                 enemyController.enemies.splice(index,1);
             } else if (player.collideWith(enemy)) { 
-                spaceLaser.gameOver();
+                ghostBomber.gameOver();
                 
             } else {
                 enemy.draw(ctx);    
             }   
           })  
-        spaceLaser.scorePoints();
+        ghostBomber.scorePoints();
         } 
 
 
@@ -425,21 +400,21 @@ const spaceLaser = {
 // score points method------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
     scorePoints() {
-        if (spaceLaser.isRunning == true) {
+        if (ghostBomber.isRunning == true) {
             if (lightModeBtn.style.display == 'block'){
-                ctx.font = "16px 'Press Start 2P'";
+                ctx.font = "16px 'press_start_2pregular'";
                 ctx.fillStyle = "white";
-                ctx.fillText("Score: "+spaceLaser.score, 15, 535);
-                ctx.font = "16px 'Press Start 2P'";
+                ctx.fillText("Score: "+ghostBomber.score, 15, 535);
+                ctx.font = "16px 'press_start_2pregular'";
                 ctx.fillStyle = "white";
-                ctx.fillText(""+spaceLaser.playerName, 300, 535);
+                ctx.fillText(""+ghostBomber.playerName, 300, 535);
             }else {
-                ctx.font = "16px 'Press Start 2P'";
+                ctx.font = "16px 'press_start_2pregular'";
                 ctx.fillStyle = "black";
-                ctx.fillText("Score: "+spaceLaser.score, 15, 535);
-                ctx.font = "16px 'Press Start 2P'";
+                ctx.fillText("Score: "+ghostBomber.score, 15, 535);
+                ctx.font = "16px 'press_start_2pregular'";
                 ctx.fillStyle = "black";
-                ctx.fillText(""+spaceLaser.playerName, 300, 535); 
+                ctx.fillText(""+ghostBomber.playerName, 300, 535); 
             }
             
         }
@@ -448,23 +423,23 @@ const spaceLaser = {
 // enemy spawn method--------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------
     enemySpawnLoop() {
-        if (spaceLaser.isRunning == true) 
+        if (ghostBomber.isRunning == true) 
         {
-            // spaceLaser.enemySpeed = spaceLaser.enemySpeed;
+            // ghostBomber.enemySpeed = ghostBomber.enemySpeed;
             const enemySpawn = Math.random();
             if (enemySpawn > 0.3) {
                 const xPos = Math.floor(Math.random()*350) + 40;
-                enemyController.enemyMove(xPos, -70, spaceLaser.enemySpeed, spaceLaser.enemyDelay);      
+                enemyController.enemyMove(xPos, -70, ghostBomber.enemySpeed, ghostBomber.enemyDelay);      
             }
         }  
     },
 
 // game over method---------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------
+// triggered by player collision with enemy.--------------------------------------------------
     gameOver() {
-        window.setTimeout(spaceLaser.hideGameScreen, 3000);
-        spaceLaser.isRunning = false;
-        spaceLaser.saveHighScore(spaceLaser.score);
+        window.setTimeout(ghostBomber.hideGameScreen, 3000);
+        ghostBomber.isRunning = false;
+        ghostBomber.saveHighScore(ghostBomber.score);
         
         clearInterval(spawnLoopInterval);
         clearInterval(gameLoopInterval);
@@ -476,109 +451,100 @@ const spaceLaser = {
 // when player "dies" there is a 3 sec pause before game over screen appears------------------ 
 
     hideGameScreen () {
-
-        
-        spaceLaser.switchScreen('#game_over_screen');
+        ghostBomber.switchScreen('#game_over_screen');
     },
 
 // game over screen method--------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------
 
     gameOverScreen() {
         
-        // localStorage.setItem('mostRecentScore', spaceLaser.score);
-        
-
         // personalized message based on score achieved-------------------------------
         //----------------------------------------------------------------------------
-        if (spaceLaser.score < 50) {
-            $('#final_name').text('C\'mon ' + spaceLaser.playerName+'! I expected more from you. ')
-            $('#final_score').text('Score: '+spaceLaser.score+' points!')
+        if (ghostBomber.score < 50) {
+            $('#final_name').text('C\'mon ' + ghostBomber.playerName+'! I expected more from you. ')
+            $('#final_score').text('Score: '+ghostBomber.score+' points!')
         }
-        if (spaceLaser.score >= 50 && spaceLaser.score < 100) {
-            $('#final_name').text('So you scored some points... big whoop, wanna fight about? Take your anger out on the court '+ spaceLaser.playerName+'!')
-            $('#final_score').text('Score: '+spaceLaser.score+' points!')
+        if (ghostBomber.score >= 50 && ghostBomber.score < 100) {
+            $('#final_name').text('So you scored some points... big whoop, wanna fight about? Take your anger out on the court '+ ghostBomber.playerName+'!')
+            $('#final_score').text('Score: '+ghostBomber.score+' points!')
         }
-        if (spaceLaser.score >= 100 && spaceLaser.score < 200) {
-            $('#final_name').text('I am impressed '+ spaceLaser.playerName+'! Nice work!')
-            $('#final_score').text('Score: '+spaceLaser.score+' points!')
+        if (ghostBomber.score >= 100 && ghostBomber.score < 200) {
+            $('#final_name').text('I am impressed '+ ghostBomber.playerName+'! Nice work!')
+            $('#final_score').text('Score: '+ghostBomber.score+' points!')
         }
-        if (spaceLaser.score >= 200 && spaceLaser.score < 400) {
-            $('#final_name').text('Thats quite the score '+ spaceLaser.playerName+'! Righteous dude!')
-            $('#final_score').text('Score: '+spaceLaser.score+' points!')
+        if (ghostBomber.score >= 200 && ghostBomber.score < 400) {
+            $('#final_name').text('Thats quite the score '+ ghostBomber.playerName+'! Righteous dude!')
+            $('#final_score').text('Score: '+ghostBomber.score+' points!')
         }
-        if (spaceLaser.score >400) {
-            $('#final_name').text(spaceLaser.playerName+' You are stone cold killer')
-            $('#final_score').text('Score: '+spaceLaser.score+' points!')
+        if (ghostBomber.score >400) {
+            $('#final_name').text(ghostBomber.playerName+' You are stone cold killer')
+            $('#final_score').text('Score: '+ghostBomber.score+' points!')
         }
-
-        if (spaceLaser.soundOn == true){
+        if (ghostBomber.soundOn == true){
             if (lightModeBtn.style.display == 'block') {
                 darkAmbience.play();
             } else {
                 smoothJazz.play();
             }
-            
-            $('#pause_button').css('display','block'); 
-            $('#play_button').css('display','none');
         } 
-        //   else if (spaceLaser.soundOn == true){}
-        // $('#pause_button').css('display','none'); 
-        // $('#play_button').css('display','block');
+        
         
     // play again method triggered by 'click'----------------
     // re triggers countdown screen -------------------------
     // ------------------------------------------------------
 
         $('#play_again').on('click', () => {
-            spaceLaser.isRunning = true;
-            if (spaceLaser.soundOn == true){
+            ghostBomber.isRunning = true;
+            // countDown.currentTime = 0;
+            if (ghostBomber.soundOn == true){
                 if (lightModeBtn.style.display == 'block') {
                     darkAmbience.pause();
-                    countDown.currentTime = 0;
                     countDown.play();
                 } else {
                     smoothJazz.pause();
-                    countDown.currentTime = 0;
                     countDown.play();
                 }
                 
             }
-
             clearInterval(spawnLoopInterval);
             clearInterval(gameLoopInterval);
             clearInterval(increaseDifficultyInterval);
-            spaceLaser.switchScreen('#game_countdown_screen');
+            ghostBomber.switchScreen('#game_countdown_screen');
         })
 
     // quit game method triggered by 'click'-----------------
     // send player back to splash screen --------------------
     // ------------------------------------------------------
         $('#quit').on('click', () => {
-            if (spaceLaser.soundOn == true){
-                if (lightModeBtn.style.display == 'block') {
-                    darkAmbience.play();
-                } else {
-                    smoothJazz.play();
-                } 
-            }
-            spaceLaser.switchScreen('#splash_screen');
-            spaceLaser.score = 0;
-            $('#name_input').val(spaceLaser.playerName);
+            // if (ghostBomber.soundOn == true){
+            //     if (lightModeBtn.style.display == 'block') {
+            //         darkAmbience.play();
+            //     } else {
+            //         smoothJazz.play();
+            //     } 
+            // }
+            ghostBomber.switchScreen('#splash_screen');
+            ghostBomber.score = 0;
+            $('#name_input').val(ghostBomber.playerName);
+            $('#controls') .attr('style', 'display:none');
+            $('#instructions').css('display','none');
+            $('#credits').css('display','none');  
+            $('#high_scores').css('display','block'); 
         })
     },
 
 // reset game board method--------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
     resetGameBoard(){
-        spaceLaser.score = 0;
+        ghostBomber.score = 0;
         player.x = canvas.width / 2.3;
         player.y = canvas.height / 1.3;
         enemyController.enemies.length = 0;
         bulletController.bullets.length = 0;
-        spaceLaser.gameDifficulty = 1; 
-        spaceLaser.enemySpeed = 2;
-        spaceLaser.enemyDelay = 3;
+        ghostBomber.gameDifficulty = 1; 
+        ghostBomber.enemySpeed = 2;
+        ghostBomber.enemyDelay = 3;
         console.log('resetting game board');
     }
 }
@@ -626,7 +592,7 @@ class Player {
             ) {
                 
                 //player contact with enemy triggers
-                    if (spaceLaser.soundOn == true){
+                    if (ghostBomber.soundOn == true){
                         if (lightModeBtn.style.display == 'block') {
                             darkAmbience.pause();
                             deadSound.play();
@@ -744,8 +710,8 @@ class BulletController {
         if (this.timeUntilNextBullet <= 0) {
             // allowed to continue firing bullets if array length is < 3
             if (this.bullets.length < 2) {
-                if (spaceLaser.soundOn == true){
-                    spaceLaser.shootSound();
+                if (ghostBomber.soundOn == true){
+                    ghostBomber.shootSound();
                 }
                 // pushes bullet onto array/params are set in bullet class
                 this.bullets.push(new Bullet(x, y, speed, damage));
@@ -824,11 +790,11 @@ class Bullet {
             this.y < sprite.y +sprite.height &&
             this.x + this.height >sprite.x
             ) {
-                if (spaceLaser.soundOn == true){
+                if (ghostBomber.soundOn == true){
                     hitSound.play();
                 }
 
-                spaceLaser.score = spaceLaser.score +10;
+                ghostBomber.score = ghostBomber.score +10;
                 return true;
             }
             return false;
@@ -906,10 +872,11 @@ class Enemy {
     
 }
 
+
 // CLASS VARIABLES
 let gameLoopInterval = null;
-let spawnLoopInterval = setInterval(spaceLaser.enemySpawnLoop, 500);
-let increaseDifficultyInterval = setInterval(spaceLaser.increaseDifficulty, 20000)
+let spawnLoopInterval = setInterval(ghostBomber.enemySpawnLoop, 500);
+let increaseDifficultyInterval = setInterval(ghostBomber.increaseDifficulty, 20000)
 
 const enemy = new Enemy(canvas);
 const enemyController = new EnemyController(canvas);
@@ -923,7 +890,7 @@ const player = new Player(canvas.width / 2.3, canvas.height / 1.3, bulletControl
 $(document).ready(() => {
 
     //fires switch screen method which triggers everything under splash screen conditional.
-    spaceLaser.switchScreen('#splash_screen');
+    ghostBomber.switchScreen('#splash_screen');
 
     // adds an underline to the highhscore menu which is shown first on splash screen
     $('#high-scores-btn').addClass('load')
@@ -940,8 +907,8 @@ $(document).ready(() => {
     // music is initialized as off.  Event listeners on play and pause buttons to start and stop game music. 
 
     $('#play_button').on('click', () => {
-        spaceLaser.soundOn = true;
-        if (spaceLaser.soundOn == true){
+        ghostBomber.soundOn = true;
+        if (ghostBomber.soundOn == true){
             if (lightModeBtn.style.display == 'block') {
                 darkAmbience.play();
             } else {
@@ -954,8 +921,8 @@ $(document).ready(() => {
     })
 
     $('#pause_button').on('click', () => {
-        spaceLaser.soundOn = false;
-        if (spaceLaser.soundOn == false){
+        ghostBomber.soundOn = false;
+        if (ghostBomber.soundOn == false){
             if (lightModeBtn.style.display == 'block') {
                 darkAmbience.pause();
             } else {

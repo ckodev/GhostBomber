@@ -1,11 +1,22 @@
 
 
-@font-face {
+/* @font-face {
 	font-family: 'Press Start 2P', cursive;
 	font-weight: 400;
 	font-style: normal;
 	font-display: swap;
 	src: url(fonts/PressStart2P-Regular.ttf);
+} */
+
+@font-face {
+    font-family: 'press_start_2pregular';
+
+    src: url('fonts/pressstart2p-regular-webfont.woff2') format('woff2'),
+         url('fonts/pressstart2p-regular-webfont.woff') format('woff');
+
+    font-weight: normal;
+    font-style: normal;
+
 }
 
 
@@ -15,7 +26,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-family: 'Press Start 2P', cursive;
+    font-family: 'press_start_2pregular', cursive;
     color: black;
     background-color: #A25D34;
     padding: 0;
@@ -26,7 +37,7 @@ body.dark {
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-family: 'Press Start 2P', cursive;
+    font-family: 'press_start_2pregular', cursive;
     color: white;
     background-color: rgb(37, 37, 37);
     padding: 0;
@@ -36,9 +47,10 @@ body.dark {
 h1 {
     font-size: 2.5rem;
     padding: .7rem;
+    padding-bottom: 0;
     margin: 0;
     margin-top: .5rem;
-    
+    line-height: 1.1;
     margin-right: 165px;
 }
 
@@ -47,6 +59,8 @@ h3 {
     text-align: center;
     
 }
+
+
 
 #splash_screen {
     position: relative;
@@ -60,6 +74,9 @@ h3 {
     width: 450px;
     height: 550px;
 }
+#splash_screen a {
+   color: black;
+}
 #splash_screen.dark {
     position: relative;
     display: flex;
@@ -71,6 +88,9 @@ h3 {
     border-radius: 10px;
     width: 450px;
     height: 550px;
+}
+#splash_screen.dark a {
+    color: white
 }
 #game_countdown_screen {
     position: relative;
@@ -152,8 +172,9 @@ button {
     border: 1px solid black;
     border-radius: 5px;
     min-width: 9rem;
-    padding: .5rem .5rem .5rem .5rem;
-    font-family: 'Press Start 2P', cursive;
+    padding: .3rem .6rem .3rem .6rem;
+    padding-top: .5rem;
+    font-family: 'press_start_2pregular', cursive;
     line-height: 1.5rem;
     font-size: .75rem;
     outline: none;
@@ -224,6 +245,7 @@ button:hover {
 }
 
 button:focus {
+   
     border-bottom: 2px solid black;
     border-right: 2px solid black;
 }
@@ -416,13 +438,6 @@ button:focus {
     border-radius: 0;
 }
 
-/* .button-wrapper {
-    display: flex;
-    justify-content: space-evenly;
-    margin-top: 2rem;
-} */
-
-
 
 input {
     border: none;
@@ -431,8 +446,9 @@ input {
     border: 1px solid black;
     border-radius: 5px;
     width: 8rem;
-    padding: .5rem;
-    font-family: 'Press Start 2P', cursive;
+    padding: .3rem;
+    padding-top: .5rem;
+    font-family: 'press_start_2pregular', cursive;
     line-height: 1.5rem;
     font-size: .75rem;
     text-align: center;
@@ -445,8 +461,9 @@ input.dark {
     border: 1px solid white;
     border-radius: 5px;
     width: 8rem;
-    padding: .5rem;
-    font-family: 'Press Start 2P', cursive;
+    padding: .3rem;
+    padding-top: .5rem;
+    font-family: 'press_start_2pregular', cursive;
     line-height: 1.5rem;
     font-size: .75rem;
     text-align: center;
@@ -475,16 +492,24 @@ input.dark:focus {
     left: 230px;
     top: 450px;
 }
+#start_button:focus {
+    background-color: #A25D34;
+}
 #play_again {
     position: absolute;
     left: 46px;
     top: 475px;
 }
-
 #quit {
     position: absolute;
     left: 196px;
     top: 475px;
+}
+#play_again:focus {
+    background-color: #A25D34;
+}
+#quit:focus {
+    background-color: #A25D34;
 }
 
 
@@ -517,7 +542,7 @@ input.dark:focus {
     position: absolute;
     width: 22px;
     cursor: pointer;
-    top:80px;
+    top:75px;
     left: 380px;
 }
 
@@ -526,30 +551,48 @@ input.dark:focus {
     position: absolute;
     width: 24px;
     cursor: pointer;
-    top:80px;
+    top:75px;
     left: 380px;
 }
+
+
+/* Removes the play/pause button from the screen in Safari only rendering the audio component of the game perpetually off */
+/* The audio in its current format causes a lag during gameplay in Safari that was worthy of removing the audio completely */
+@media not all and (min-resolution:.001dpcm)
+{ @supports (-webkit-appearance:none) {
+
+    #play_button { 
+
+        display: none;
+
+    }
+    #pause_button { 
+
+        display: none;
+
+    }
+}}
 
 #sun_button {
     display: none;
     position: absolute;
     width: 20px;
-    top:80px;
-    left: 415px;
+    top:75px;
+    left: 410px;
 }
 #sun_button.dark{
     color: white;
     display: none;
     position: absolute;
     width: 20px;
-    top:80px;
-    left: 415px;
+    top:75px;
+    left: 410px;
 }
 
 #moon_button {
     position: absolute;
     width: 20px;
-    top:80px;
-    left: 415px;
+    top:75px;
+    left: 410px;
 }
 
