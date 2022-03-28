@@ -36,7 +36,7 @@ smoothJazz.volume = 0.7;
 shootSound.preload = true;
 smoothJazz.preload = true;
 smoothJazz.loop = true;
-darkAmbience.volume = 0.7;
+darkAmbience.volume = 0.3;
 darkAmbience.preload = true;
 darkAmbience.loop = true;
 
@@ -51,12 +51,14 @@ darkModeBtn.addEventListener('click', darkMode)
 darkModeBtn.addEventListener('mousedown', function(e){
     e.preventDefault();
 });
+
 // lightmode button variable
 const lightModeBtn = document.getElementById('sun_button');
 lightModeBtn.addEventListener('click', lightMode)
 lightModeBtn.addEventListener('mousedown', function(e){
     e.preventDefault();
 });
+
 // dark mode item variables
 const button = document.querySelectorAll('button');
 const menuItem1 = document.querySelector('.menu-button1');
@@ -147,8 +149,6 @@ function lightMode() {
 const highScoresName = document.getElementById('high_scores_name');
 const highScoresScore = document.getElementById('high_scores_score');
 const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
-const MAX_HIGH_SCORES = 10;
-
 
 
 
@@ -331,8 +331,8 @@ const ghostBomber = {
    
     },
 
-    // stops countdown soundfx and runs start game
-    // triggered from switchSCreen(game_countdown_screen)  
+// stops countdown soundfx and runs start game
+// triggered from switchSCreen(game_countdown_screen)  
     delayStart() {
         ghostBomber.startGame();
         countDown.pause();
@@ -397,7 +397,7 @@ const ghostBomber = {
 
     },
 
-// score points method------------------------------------------------------------------------
+// score points method, draws the points on game screen---------------------------------------
 //--------------------------------------------------------------------------------------------
     scorePoints() {
         if (ghostBomber.isRunning == true) {
@@ -504,8 +504,7 @@ const ghostBomber = {
                 } else {
                     smoothJazz.pause();
                     countDown.play();
-                }
-                
+                }  
             }
             clearInterval(spawnLoopInterval);
             clearInterval(gameLoopInterval);
@@ -517,13 +516,6 @@ const ghostBomber = {
     // send player back to splash screen --------------------
     // ------------------------------------------------------
         $('#quit').on('click', () => {
-            // if (ghostBomber.soundOn == true){
-            //     if (lightModeBtn.style.display == 'block') {
-            //         darkAmbience.play();
-            //     } else {
-            //         smoothJazz.play();
-            //     } 
-            // }
             ghostBomber.switchScreen('#splash_screen');
             ghostBomber.score = 0;
             $('#name_input').val(ghostBomber.playerName);
@@ -873,11 +865,12 @@ class Enemy {
 }
 
 
-// CLASS VARIABLES
+// Interval variables
 let gameLoopInterval = null;
 let spawnLoopInterval = setInterval(ghostBomber.enemySpawnLoop, 500);
 let increaseDifficultyInterval = setInterval(ghostBomber.increaseDifficulty, 20000)
 
+// CLASS VARIABLES
 const enemy = new Enemy(canvas);
 const enemyController = new EnemyController(canvas);
 const bulletController = new BulletController(canvas);
@@ -888,7 +881,6 @@ const player = new Player(canvas.width / 2.3, canvas.height / 1.3, bulletControl
 // initializes the splash screen --------------------------------------------------------
 
 $(document).ready(() => {
-
     //fires switch screen method which triggers everything under splash screen conditional.
     ghostBomber.switchScreen('#splash_screen');
 
