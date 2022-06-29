@@ -208,11 +208,8 @@ function handleVisibilityChange() {
             smoothJazz.pause();
         }
     }else{
-        if (lightModeBtn.style.display == 'block') {
-            darkAmbience.play();
-        } else {
-            smoothJazz.play();
-        }
+        $('#pause_button').css('display','none'); 
+        $('#play_button').css('display','block');
     }
 }
 document.addEventListener("visibilitychange", handleVisibilityChange, false);
