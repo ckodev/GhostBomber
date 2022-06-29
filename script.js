@@ -1,11 +1,29 @@
 "use strict";
 
+
+
+
 //gameboard variables
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
+const videoElement = document.getElementById('hiddenVid').play();
 
-canvas.width = 450;
-canvas.height = 550;
+
+            
+
+if (window.innerWidth < 600){
+    canvas.width = 320;
+    canvas.height = 550;
+} else {
+    canvas.width = 450;
+    canvas.height = 550;
+}
+
+// let draggable = false;
+
+// canvas.onmousedown = (e) => {
+//     console.log('mousedown', e.layerX, e.layerY);
+// }
 
 //player image varaibles
 const rol = document.getElementById('rol');
@@ -20,6 +38,7 @@ const deadDark = document.getElementById('dead_dark');
 //splash-screen variables
 const instructions = document.getElementById('instructions');
 const controls = document.getElementById('controls');
+
 
 // audio variables 
 const darkAmbience = document.getElementById('dark_ambience');
@@ -64,9 +83,11 @@ const button = document.querySelectorAll('button');
 const menuItem1 = document.querySelector('.menu-button1');
 const menuItem2 = document.querySelector('.menu-button2');
 const menuItem3 = document.querySelector('.menu-button3');
+const menuItem5 = document.querySelector('.menu-button5');
 const instructionsBtn = document.getElementById('instructions-btn');
 const controlsBtn = document.getElementById('controls-btn');
 const highScoresBtn = document.getElementById('high-scores-btn');
+const bugsBtn = document.getElementById('bugs-btn');
 const nameInput = document.getElementById('name_input');
 const startBtn = document.getElementById('start_button');
 const splash = document.getElementById('splash_screen');
@@ -76,6 +97,7 @@ const quit = document.getElementById('quit');
 const over = document.getElementById('game_over_screen');
 const gameOnScreen = document.getElementById('game');
 const credits = document.getElementById('credits-btn');
+const menuButtonWrapper = document.getElementById('menu-button-wrapper');
  
 //dark mode function 
 function darkMode() {
@@ -96,9 +118,11 @@ function darkMode() {
     menuItem1.classList.add('dark');
     menuItem2.classList.add('dark');
     menuItem3.classList.add('dark');
+    menuItem5.classList.add('dark');
     instructionsBtn.classList.add('dark');
     controlsBtn.classList.add('dark');
     highScoresBtn.classList.add('dark');
+    bugsBtn.classList.add('dark');
     nameInput.classList.add('dark');
     startBtn.classList.add('dark');
     splash.classList.add('dark');
@@ -108,6 +132,7 @@ function darkMode() {
     over.classList.add('dark');
     gameOnScreen.classList.add('dark');
     credits.classList.add('dark');
+    menuButtonWrapper.classList.add('dark');
 
     
 }
@@ -129,9 +154,11 @@ function lightMode() {
     menuItem1.classList.remove('dark');
     menuItem2.classList.remove('dark');
     menuItem3.classList.remove('dark');
+    menuItem5.classList.remove('dark');
     instructionsBtn.classList.remove('dark');
     controlsBtn.classList.remove('dark');
     highScoresBtn.classList.remove('dark');
+    bugsBtn.classList.remove('dark');
     nameInput.classList.remove('dark');
     startBtn.classList.remove('dark');
     splash.classList.remove('dark');
@@ -141,6 +168,7 @@ function lightMode() {
     over.classList.remove('dark');
     gameOnScreen.classList.remove('dark');
     credits.classList.remove('dark');
+    menuButtonWrapper.classList.remove('dark');
 
 }
 
@@ -148,7 +176,46 @@ function lightMode() {
 // const mostRecentScore = localStorage.getItem('mostRecentScore');
 const highScoresName = document.getElementById('high_scores_name');
 const highScoresScore = document.getElementById('high_scores_score');
-const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+let highScoreFromPHP = [];
+let finalData = [];
+
+
+
+
+if (videoElement !== undefined) {
+    videoElement.then(function() {
+    // Automatic playback started!
+    }).catch(function() {
+    // Automatic playback failed.
+    // Show a UI element to let the user manually start playback.
+    startBtn.style.display = 'none';
+    nameInput.style.display = 'none';
+    menuButtonWrapper.style.display = 'none';
+    const warning = document.getElementById('warning');
+    warning.style.display = 'block';
+    
+    });
+} 
+
+
+
+// Pauses game music on browser minimise. Plays game music on re-open. 
+function handleVisibilityChange() {
+    if (document.hidden){
+        if (lightModeBtn.style.display == 'block') {
+            darkAmbience.pause();
+        } else {
+            smoothJazz.pause();
+        }
+    }else{
+        if (lightModeBtn.style.display == 'block') {
+            darkAmbience.play();
+        } else {
+            smoothJazz.play();
+        }
+    }
+}
+document.addEventListener("visibilitychange", handleVisibilityChange, false);
 
 
 
@@ -165,47 +232,43 @@ const ghostBomber = {
     enemyDelay: 3,
     highScore: [],
     soundOn: false, 
+    timeBonus: 0,
     
     // saves the high scores in local storage 
     saveHighScore() {
 
         // the player score object which holds and sets the name value pairs that will be pushed onto the highscores array each time a player completes a round of the game
         const playerScore = {
-            score: ghostBomber.score,
+            score: ghostBomber.score + ghostBomber.timeBonus,
             name: ghostBomber.playerName,
         }
 
-        // pushes the name value pairs set by the player in the playerScore object into the highScores array to be sorted and displayed 
-        highScores.push(playerScore)
-
-        // sorts the array based on score values. 
-        // If B score < A score it comes after it in the high scores array.  Basically if B - A returns a negative integer then it places it after the array item its being compared with and vice versa. 
-        highScores.sort( (a,b) => {
-            return b.score - a.score;
-        } )
-
-        // removes item 11 from the array. highscores list only stores top 10. 
-        highScores.splice(10);
+        fetch('highscore-processing.php', { method: 'POST', 
+                    headers: {'Content-Type': 'application/json',
+                }, body: JSON.stringify(playerScore)})
+            .then(res => res.text())
 
         
-        // set a cookie for stringified highscores array
-        // the goal is to create a highscores list on the server side
-        document.cookie = "highScores="+ JSON.stringify(highScores);
-        
-        
-        // setting the local storage of stringified highscores array
-        localStorage.setItem('highScores', JSON.stringify(highScores))
+            .then((highScoreDataFromPHP) => {
 
-        // setting the HTML display of the hischores Name 
-        highScoresName.innerHTML = highScores.map(playerScore => {
-            return `<li class="high-scores" >${playerScore.name}</li>`
-        }).join("");
-        highScoresScore.innerHTML = highScores.map(playerScore => {
-            return `<li class="high-scores" >${playerScore.score}</li>`
-        }).join("");
+                // the string returned from php needs to be parsed twice. 
+                highScoreFromPHP = JSON.parse(highScoreDataFromPHP);
+                finalData = JSON.parse(highScoreFromPHP);
+                // console.log(finalData);
+
+                // setting the HTML display of the highScores NAME
+                highScoresName.innerHTML = finalData.map(playerScore => {
+                    return `<li class="high-scores" >${playerScore.name}</li>`
+                }).join("");
+        
+                 // setting the HTML display of the highScores SCORE 
+                highScoresScore.innerHTML = finalData.map(playerScore => {
+                    return `<li class="high-scores" >&nbsp-&nbsp${playerScore.score}</li>`
+                }).join("");
+               
+        })
+        
     },
-
-    
 
     // plays the ghost soundfx when player shoots weapon
     shootSound() {
@@ -215,8 +278,6 @@ const ghostBomber = {
             shootSound.play();
         } 
     },
-
-      
 
 // Switch screen method--------------------------------------------------------------
 //-----------------------------------------------------------------------------------
@@ -238,7 +299,7 @@ const ghostBomber = {
             window.setTimeout(ghostBomber.delayStart, 2800);
             
         }
-
+    
         // splash_screen-----------------------------------------------------------------
         //------------------------------------------------------------------------------- 
         if (ghostBomber.currentScreen == '#splash_screen') {
@@ -249,11 +310,11 @@ const ghostBomber = {
             if (ghostBomber.$nameInput.val().length > 0  && ghostBomber.$nameInput.val().length < 9) {
                 if (ghostBomber.soundOn == true){
                     if (lightModeBtn.style.display == 'block') {
-                        darkAmbience.pause();
-                        countDown.play()
+                        // darkAmbience.pause();
+                        // countDown.play()
                     } else {
-                        smoothJazz.pause();
-                        countDown.play();
+                        // smoothJazz.pause();
+                        // countDown.play();
                     } 
                 }
                 ghostBomber.switchScreen('#game_countdown_screen');  
@@ -273,6 +334,7 @@ const ghostBomber = {
                 $('#high_scores') .attr('style', 'display:none'); 
                 $('#controls') .attr('style', 'display:none');
                 $('#credits').css('display','none');  
+                $('#bugs').css('display','none');  
                 $('#instructions') .attr('style', 'display:');
                 $('#high-scores-btn').removeClass('load')
             })
@@ -280,13 +342,15 @@ const ghostBomber = {
             $('#controls-btn').on('click', () => {
                 $('#high_scores') .attr('style', 'display:none');
                 $('#instructions').css('display','none'); 
-                $('#credits').css('display','none'); 
+                $('#credits').css('display','none');
+                $('#bugs').css('display','none');  
                 $('#controls').css('display','block'); 
                 $('#high-scores-btn').removeClass('load')
             })
             $('#credits-btn').on('click', () => {
                 $('#high_scores') .attr('style', 'display:none');
                 $('#instructions').css('display','none');
+                $('#bugs').css('display','none'); 
                 $('#controls') .attr('style', 'display:none'); 
                 $('#credits').css('display','block'); 
                 $('#high-scores-btn').removeClass('load')
@@ -295,36 +359,19 @@ const ghostBomber = {
             $('#high-scores-btn').on('click', () => {
                 $('#controls') .attr('style', 'display:none');
                 $('#instructions').css('display','none');
+                $('#bugs').css('display','none'); 
                 $('#credits').css('display','none');  
                 $('#high_scores').css('display','block'); 
             })
+            $('#bugs-btn').on('click', () => {
+                $('#controls') .attr('style', 'display:none');
+                $('#instructions').css('display','none');
+                $('#bugs').css('display','block'); 
+                $('#credits').css('display','none');  
+                $('#high_scores').css('display','none'); 
+                $('#high-scores-btn').removeClass('load')
+            })
 
-
-            // splash screen audio controls----------------
-            // --------------------------------------------
-
-            // $('#play_button').on('click', () => {
-            //     ghostBomber.soundOn = true;
-            //     if (ghostBomber.soundOn == true){
-            //         if (lightModeBtn.style.display == 'block') {
-            //             darkAmbience.play();
-            //         } else {
-            //             smoothJazz.play()
-            //         }
-                    
-            //     }
-            // })
-        
-            // $('#pause_button').on('click', () => {
-            //     ghostBomber.soundOn = false;
-            //     if (ghostBomber.soundOn == false){
-            //         if (lightModeBtn.style.display == 'block') {
-            //             darkAmbience.pause();
-            //         } else {
-            //             smoothJazz.pause()
-            //         }
-            //     }  
-            // })
         }
         
     
@@ -349,11 +396,14 @@ const ghostBomber = {
 // start game method--------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------
     startGame() {
+
+        
             ghostBomber.switchScreen('#game_on_screen');
             ghostBomber.resetGameBoard();
             clearInterval(gameLoopInterval);
             clearInterval(spawnLoopInterval);
             clearInterval(increaseDifficultyInterval);
+            clearInterval(timeBonusInterval);
             gameLoopInterval = setInterval(ghostBomber.gameLoop, 1000 / 60);
             spawnLoopInterval = setInterval(ghostBomber.enemySpawnLoop, 300);
 
@@ -361,6 +411,21 @@ const ghostBomber = {
                ghostBomber.enemySpeed = ghostBomber.enemySpeed * 1.2;
                ghostBomber.enemyDelay = ghostBomber.enemyDelay/2;
             }, 10000);
+            timeBonusInterval = setInterval(() => {
+               ghostBomber.timeBonus++;
+            }, 3000);
+
+            // if (videoElement !== undefined) {
+            //     videoElement.then(function() {
+            //     // Automatic playback started!
+            //     }).catch(function() {
+            //     // Automatic playback failed.
+            //     // Show a UI element to let the user manually start playback.
+            //     canvas.style.display = 'none';
+            //     });
+            // } 
+
+
 
     },
 
@@ -392,6 +457,7 @@ const ghostBomber = {
             }   
           })  
         ghostBomber.scorePoints();
+        
         } 
 
 
@@ -402,19 +468,38 @@ const ghostBomber = {
     scorePoints() {
         if (ghostBomber.isRunning == true) {
             if (lightModeBtn.style.display == 'block'){
-                ctx.font = "16px 'press_start_2pregular'";
-                ctx.fillStyle = "white";
-                ctx.fillText("Score: "+ghostBomber.score, 15, 535);
-                ctx.font = "16px 'press_start_2pregular'";
-                ctx.fillStyle = "white";
-                ctx.fillText(""+ghostBomber.playerName, 300, 535);
+                if (window.innerWidth < 600){
+                    ctx.font = "16px 'press_start_2pregular'";
+                    ctx.fillStyle = "#ffb703";
+                    ctx.fillText((ghostBomber.score + ghostBomber.timeBonus), 250, 28);
+                    ctx.font = "16px 'press_start_2pregular'";
+                    ctx.fillStyle = "#ffb703";
+                    ctx.fillText(ghostBomber.playerName, 20, 28);
+                }else {
+                    ctx.font = "16px 'press_start_2pregular'";
+                    ctx.fillStyle = "#ffb703";
+                    ctx.fillText((ghostBomber.score + ghostBomber.timeBonus), 390, 535);
+                    ctx.font = "16px 'press_start_2pregular'";
+                    ctx.fillStyle = "#ffb703";
+                    ctx.fillText(ghostBomber.playerName, 20, 535);
+                }
+                
             }else {
-                ctx.font = "16px 'press_start_2pregular'";
-                ctx.fillStyle = "black";
-                ctx.fillText("Score: "+ghostBomber.score, 15, 535);
-                ctx.font = "16px 'press_start_2pregular'";
-                ctx.fillStyle = "black";
-                ctx.fillText(""+ghostBomber.playerName, 300, 535); 
+                if (window.innerWidth < 600){
+                    ctx.font = "16px 'press_start_2pregular'";
+                    ctx.fillStyle = "black";
+                    ctx.fillText((ghostBomber.score + ghostBomber.timeBonus), 250, 28);
+                    ctx.font = "16px 'press_start_2pregular'";
+                    ctx.fillStyle = "black";
+                    ctx.fillText(ghostBomber.playerName, 20, 28);
+                }else {
+                    ctx.font = "16px 'press_start_2pregular'";
+                    ctx.fillStyle = "black";
+                    ctx.fillText((ghostBomber.score + ghostBomber.timeBonus), 390, 535);
+                    ctx.font = "16px 'press_start_2pregular'";
+                    ctx.fillStyle = "black";
+                    ctx.fillText(ghostBomber.playerName, 20, 535);
+                }
             }
             
         }
@@ -423,13 +508,17 @@ const ghostBomber = {
 // enemy spawn method--------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------
     enemySpawnLoop() {
-        if (ghostBomber.isRunning == true) 
-        {
-            // ghostBomber.enemySpeed = ghostBomber.enemySpeed;
+        if (ghostBomber.isRunning == true) {
             const enemySpawn = Math.random();
             if (enemySpawn > 0.3) {
-                const xPos = Math.floor(Math.random()*350) + 40;
-                enemyController.enemyMove(xPos, -70, ghostBomber.enemySpeed, ghostBomber.enemyDelay);      
+                if (window.innerWidth < 600) {
+                    const xPos = Math.floor(Math.random()*290);
+                    enemyController.enemyMove(xPos, -50, ghostBomber.enemySpeed, ghostBomber.enemyDelay); 
+                }else {
+                    const xPos = Math.floor(Math.random()*420);
+                    enemyController.enemyMove(xPos, -50, ghostBomber.enemySpeed, ghostBomber.enemyDelay); 
+                }
+                     
             }
         }  
     },
@@ -439,11 +528,12 @@ const ghostBomber = {
     gameOver() {
         window.setTimeout(ghostBomber.hideGameScreen, 3000);
         ghostBomber.isRunning = false;
-        ghostBomber.saveHighScore(ghostBomber.score);
+        ghostBomber.saveHighScore(ghostBomber.score,ghostBomber.timeBonus);
         
         clearInterval(spawnLoopInterval);
         clearInterval(gameLoopInterval);
         clearInterval(increaseDifficultyInterval);
+        clearInterval(timeBonusInterval);
         
     },
 
@@ -463,23 +553,23 @@ const ghostBomber = {
         //----------------------------------------------------------------------------
         if (ghostBomber.score < 50) {
             $('#final_name').text('C\'mon ' + ghostBomber.playerName+'! I expected more from you. ')
-            $('#final_score').text('Score: '+ghostBomber.score+' points!')
+            $('#final_score').text((ghostBomber.score + ghostBomber.timeBonus)+' points!')
         }
         if (ghostBomber.score >= 50 && ghostBomber.score < 100) {
             $('#final_name').text('So you scored some points... big whoop, wanna fight about? Take your anger out on the court '+ ghostBomber.playerName+'!')
-            $('#final_score').text('Score: '+ghostBomber.score+' points!')
+            $('#final_score').text((ghostBomber.score + ghostBomber.timeBonus)+' points!')
         }
         if (ghostBomber.score >= 100 && ghostBomber.score < 200) {
             $('#final_name').text('I am impressed '+ ghostBomber.playerName+'! Nice work!')
-            $('#final_score').text('Score: '+ghostBomber.score+' points!')
+            $('#final_score').text((ghostBomber.score + ghostBomber.timeBonus)+' points!')
         }
         if (ghostBomber.score >= 200 && ghostBomber.score < 400) {
             $('#final_name').text('Thats quite the score '+ ghostBomber.playerName+'! Righteous dude!')
-            $('#final_score').text('Score: '+ghostBomber.score+' points!')
+            $('#final_score').text((ghostBomber.score + ghostBomber.timeBonus)+' points!')
         }
         if (ghostBomber.score >400) {
             $('#final_name').text(ghostBomber.playerName+' You are stone cold killer')
-            $('#final_score').text('Score: '+ghostBomber.score+' points!')
+            $('#final_score').text((ghostBomber.score + ghostBomber.timeBonus)+' points!')
         }
         if (ghostBomber.soundOn == true){
             if (lightModeBtn.style.display == 'block') {
@@ -499,16 +589,18 @@ const ghostBomber = {
             // countDown.currentTime = 0;
             if (ghostBomber.soundOn == true){
                 if (lightModeBtn.style.display == 'block') {
-                    darkAmbience.pause();
-                    countDown.play();
+                    // darkAmbience.pause();
+                    // countDown.play();
                 } else {
-                    smoothJazz.pause();
-                    countDown.play();
+                    // smoothJazz.pause();
+                    // countDown.play();
                 }  
             }
             clearInterval(spawnLoopInterval);
             clearInterval(gameLoopInterval);
             clearInterval(increaseDifficultyInterval);
+            clearInterval(timeBonusInterval);
+
             ghostBomber.switchScreen('#game_countdown_screen');
         })
 
@@ -522,7 +614,9 @@ const ghostBomber = {
             $('#controls') .attr('style', 'display:none');
             $('#instructions').css('display','none');
             $('#credits').css('display','none');  
-            $('#high_scores').css('display','block'); 
+            $('#high_scores').css('display','block');
+            $('#bugs').css('display','none');
+        
         })
     },
 
@@ -530,13 +624,14 @@ const ghostBomber = {
 //--------------------------------------------------------------------------------------------
     resetGameBoard(){
         ghostBomber.score = 0;
+        ghostBomber.timeBonus = 0;
         player.x = canvas.width / 2.3;
         player.y = canvas.height / 1.3;
         enemyController.enemies.length = 0;
         bulletController.bullets.length = 0;
         ghostBomber.gameDifficulty = 1; 
         ghostBomber.enemySpeed = 2;
-        ghostBomber.enemyDelay = 3;
+        ghostBomber.enemyDelay = 3;  
         console.log('resetting game board');
     }
 }
@@ -546,26 +641,63 @@ const ghostBomber = {
 
 class Player {
 
-    constructor(x, y, bulletController) {
+    constructor(x, y, bulletController, mobileWidth, mobileHeight) {
         this.x = x,
         this.y = y,
         this.color = 'black'
         this.bulletController = bulletController,
-        this.width = 40,
-        this.height = 40,
+        this.width = mobileWidth,
+        this.height = mobileHeight,
         this.speed = 5,
-    
+        this.draggable = false,
+        this.touches = [],
+        this.touchEngaged = false,
+
+        window.addEventListener('touchstart', e => {
+            // e.preventDefault();
+            console.log('start');
+            this.touchEngaged = true;
+
+            
+            
+        });
+
+        
+        window.addEventListener('touchmove', e => {
+            e.preventDefault();
+            console.log('move');
+            console.log(e);
+            
+
+            if (e.targetTouches[0].clientX - canvas.offsetLeft > this.width/2 && 
+                e.targetTouches[0].clientX - canvas.offsetLeft < (canvas.width-(this.width/2))){
+                let touchLocation = e.targetTouches[0];
+                this.x = touchLocation.clientX - canvas.offsetLeft - this.width / 2;
+                
+            }
+            
+        }); 
+
+        window.addEventListener('touchend', e => {
+            e.stopPropagation();
+            console.log('end');
+            this.touchEngaged = false;
+        });
+
+
+        
         document.addEventListener('keydown', this.keydown);
         document.addEventListener('keyup', this.keyup);
     }
 
+
     //player draw method-------------------------------------------
     //-------------------------------------------------------------
-    
-
     draw(ctx) {
         this.move();
         this.shoot();
+        
+        
 
         if (lightModeBtn.style.display == 'block'){
             ctx.drawImage(rolDark,this.x, this.y, this.width, this.height);
@@ -584,16 +716,16 @@ class Player {
             ) {
                 
                 //player contact with enemy triggers
-                    if (ghostBomber.soundOn == true){
-                        if (lightModeBtn.style.display == 'block') {
-                            darkAmbience.pause();
-                            deadSound.play();
-                        } else {
-                            smoothJazz.pause();
-                            deadSound.play();
-                        }
-                        
+                if (ghostBomber.soundOn == true){
+                    if (lightModeBtn.style.display == 'block') {
+                        darkAmbience.pause();
+                        deadSound.play();
+                    } else {
+                        smoothJazz.pause();
+                        deadSound.play();
                     }
+                    
+                }
                 
                 //color over player image and then draw player dead image 
                 
@@ -615,6 +747,16 @@ class Player {
     //player shoot method------------------------------------------
     //-------------------------------------------------------------
     shoot() {
+       
+        
+        if (this.touchEngaged == true){
+            const speed = 8;
+            const delay = 10;
+            const damage = 1;
+            const bulletX = this.x + this.width/3;
+            const bulletY = this.y - this.height/2.5;
+            this.bulletController.shoot(bulletX, bulletY, speed, damage, delay);
+        }
         if (this.shootPressed) {
             const speed = 8;
             const delay = 10;
@@ -627,6 +769,9 @@ class Player {
     //player move method-------------------------------------------
     //-------------------------------------------------------------
     move() {
+
+        
+
         if (this.upPressed && this.y > 350) {
             this.y -= this.speed;
         }
@@ -640,6 +785,8 @@ class Player {
             this.x +=this.speed;
         }
     }
+
+   
 
     //player event listener keydown method-------------------------
     //-------------------------------------------------------------
@@ -760,16 +907,26 @@ class Bullet {
         this.color = "red";
         this.width = 15;
         this.height = 25;
+        this.smWidth = 12;
+        this.smHeight = 22;
     }
 
     draw(ctx) {
         // fillStyle specifies color, gradient or pattern to be used inside of a shape
-
-        if (lightModeBtn.style.display == 'block'){
-            ctx.drawImage(ghostDark,this.x, this.y, this.width, this.height);
-        }else {
-            ctx.drawImage(ghost,this.x, this.y, this.width, this.height);
+        if (window.innerWidth < 600) {
+            if (lightModeBtn.style.display == 'block'){
+                ctx.drawImage(ghostDark,this.x, this.y, this.smWidth, this.smHeight);
+            }else {
+                ctx.drawImage(ghost,this.x, this.y, this.smWidth, this.smHeight);
+            }
+        } else {
+            if (lightModeBtn.style.display == 'block'){
+                ctx.drawImage(ghostDark,this.x, this.y, this.width, this.height);
+            }else {
+                ctx.drawImage(ghost,this.x, this.y, this.width, this.height);
+            }
         }
+        
         // this "-=" is what moves the bullet up the screen
         this.y -= this.speed;
         // fillRect colors in the bullet
@@ -843,17 +1000,29 @@ class Enemy {
         this.color = 'black';
         this.width = 35;
         this.height = 30;
+        this.smWidth = 30;
+        this.smHeight = 25;
+
+        
 
     }
 
     draw(ctx) {
         // fillStyle specifies color, gradient or pattern to be used inside of a shape 
-
-        if (lightModeBtn.style.display == 'block'){
-            ctx.drawImage(bombDark,this.x, this.y, this.width, this.height);
+        if (window.innerWidth < 600) {
+            if (lightModeBtn.style.display == 'block'){
+                ctx.drawImage(bombDark,this.x, this.y, this.smWidth, this.smHeight);
+            }else {
+                ctx.drawImage(bomb,this.x, this.y, this.smWidth, this.smHeight);
+            }
         }else {
-            ctx.drawImage(bomb,this.x, this.y, this.width, this.height);
+            if (lightModeBtn.style.display == 'block'){
+                ctx.drawImage(bombDark,this.x, this.y, this.width, this.height);
+            }else {
+                ctx.drawImage(bomb,this.x, this.y, this.width, this.height);
+            }
         }
+        
         // ctx.fillStyle = this.color;
         // this moves the enemy down the screen
         this.y += this.speed;
@@ -869,12 +1038,21 @@ class Enemy {
 let gameLoopInterval = null;
 let spawnLoopInterval = setInterval(ghostBomber.enemySpawnLoop, 500);
 let increaseDifficultyInterval = setInterval(ghostBomber.increaseDifficulty, 20000)
+let timeBonusInterval = setInterval(ghostBomber.timeBonus, 3000);
+let mobileWidth = 40;
+let mobileHeight = 40;
 
+if (window.innerWidth < 600){
+    mobileWidth = 33;
+    mobileHeight = 33;
+
+}
 // CLASS VARIABLES
 const enemy = new Enemy(canvas);
 const enemyController = new EnemyController(canvas);
 const bulletController = new BulletController(canvas);
-const player = new Player(canvas.width / 2.3, canvas.height / 1.3, bulletController);
+const player = new Player(canvas.width / 2.3, canvas.height / 2, bulletController, mobileWidth, mobileHeight);
+
 
 
 // document ready------------------------------------------------------------------------
@@ -883,18 +1061,18 @@ const player = new Player(canvas.width / 2.3, canvas.height / 1.3, bulletControl
 $(document).ready(() => {
     //fires switch screen method which triggers everything under splash screen conditional.
     ghostBomber.switchScreen('#splash_screen');
-
+    darkMode();
     // adds an underline to the highhscore menu which is shown first on splash screen
     $('#high-scores-btn').addClass('load')
     
-
+    ghostBomber.saveHighScore();
     // loads highscores & coresponding names from local storage array and returns them as <li>'s
-    highScoresName.innerHTML = highScores.map(playerScore => {
-        return `<li class="high-scores" >${playerScore.name}</li>`
-    }).join("");
-    highScoresScore.innerHTML = highScores.map(playerScore => {
-        return `<li class="high-scores" >${playerScore.score}</li>`
-    }).join("");
+    // highScoresName.innerHTML = finalData.map(playerScore => {
+    //     return `<li class="high-scores" >${playerScore.name}</li>`
+    // }).join("");
+    // highScoresScore.innerHTML = finalData.map(playerScore => {
+    //     return `<li class="high-scores" >${playerScore.score}</li>`
+    // }).join("");
 
     // music is initialized as off.  Event listeners on play and pause buttons to start and stop game music. 
 

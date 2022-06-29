@@ -3,17 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1">
     <!-- link to style sheet -->
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <!-- custom font -->
-    <!-- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"> -->
     <!-- jQuery script tag -->
     <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
     <!-- font awesome kit -->
-    <script src="https://kit.fontawesome.com/7dbc5a702c.js" crossorigin="anonymous"></script>
+    <!-- <script src="https://kit.fontawesome.com/7dbc5a702c.js" crossorigin="anonymous"></script> -->
     <!-- favicon Bomb-fav -->
     <link rel="apple-touch-icon-precomposed" sizes="57x57" href="bomb-fav/apple-touch-icon-57x57.png" />
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="bomb-fav/apple-touch-icon-114x114.png" />
@@ -42,6 +39,8 @@
 
     <div class="header-wrapper">
 
+        <video id="hiddenVid" hidden autoplay loop muted playsinline webkit-playsinline src="images/Surfers-in-the-ocean-header-video-home-page.mp4"></video>
+
         <h1>Ghost <br>Bomber</h1>
 
         <!-- play button -->
@@ -68,50 +67,76 @@
 
     <div id="splash_screen" class="screen">
         <div class="splash-container">
-
-            <div class="menu-button-wrapper" id="menu-button-wrapper">
-                <button class="menu-button1" id="high-scores-btn" type="submit">High Scores</button>
-                <button class="menu-button2" id="instructions-btn" type="submit">Instructions</button>
-                <button class="menu-button3" id="controls-btn" type="submit">Controls</button>
-                <button class="menu-button4" id="credits-btn" type="submit">Credits</button>
-            </div>
-
-            <section id="high_scores" style="display:block">
-                <h2>High Scores</h2>
-                <div class="high_scores_wrapper">
-                    <div class="high_scores_name_wrapper">
-                        <ol id="high_scores_name"></ol>
-                    </div>
-                    <div class="high_scores_score_wrapper">
-                        <ul id="high_scores_score"></ul>
-                    </div>
+            
+            <div>
+                <div class="menu-button-wrapper" id="menu-button-wrapper">
+                    <button class="menu-button1" id="high-scores-btn" type="submit"><img style="width: 22px" src="images/bomb-solid.png" alt="highscores menu represented by bomb icon"></button>
+                    <button class="menu-button2" id="instructions-btn" type="submit"><img style="width: 20px" src="images/face-rolling-eyes-regular.png" alt=""></button>
+                    <button class="menu-button3" id="controls-btn" type="submit"><img style="width: 20px" src="images/face-dizzy-regular.png" alt=""></button>
+                    <button class="menu-button4" id="credits-btn" type="submit"><img style="width: 15px" src="images/ghost-solid.png" alt=""></button>
+                    <button class="menu-button5" id="bugs-btn" type="submit"><img style="width: 20px" src="images/bug-solid.png" alt=""></button>
                 </div>
-            </section>
+                <section id="high_scores" style="display:block">
+                    <h2>High Scores</h2>
+                    <div class="high_scores_wrapper">
+                        <div class="high_scores_name_wrapper">
+                            <ol id="high_scores_name"></ol>
+                        </div>
+                        <div class="high_scores_score_wrapper">
+                            <ul id="high_scores_score"></ul>
+                        </div>
+                    </div>
+                </section>
+                <section id="instructions" style="display:none">
+                    <h2>Instructions</h2>
+                    <p>Destroy as many bombs as possible without getting hit!<br><br>
+                       It may seem easy at first but the longer you survive, the more difficult it becomes...<br> <br>God speed Ghost Bomber.
+                    </p>
+                </section>
+                <section id="bugs" style="display:none">
+                    <h2>Bugs & Suggestions</h2>
+                    <a href="mailto: coryowensmusic@gmail.com">EMAIL ME</a>
+                    <!-- <form method="POST" action="form-processor">
+                        <input type="text" id="name" name="name" placeholder="name">
+                        <input type="email" id="email" name="email" placeholder="email@whatever.bro">
+                        ​<textarea id="textarea" rows="5" cols="30"></textarea>
+                    </form> -->
+                </section>
+            
+           
 
-            <section id="instructions" style="display:none">
-                <h2>Instructions</h2>
-                <p>Destroy as many bombs as possible without getting hit!<br><br>
-                   It may seem easy at first but the longer you survive, the more difficult it becomes...<br> <br>God speed Ghost Bomber.
-                </p>
-            </section>
 
             <section id="controls" style="display:none">
-                <h2>Controls</h2>
-                <p>Move: left/right/up/down Arrows </p>
-                <p>Shoot: <br>Space bar</p>
+                <h2>Details</h2>
+                <div class="control-desktop">
+                    <p>bombs: +10<br>
+                        timeBonus: +1/3sec</p>
+                    <p>Move: left/right/up/down Arrows </p>
+                    <p>Shoot: <br>Space bar</p>
+                    
+                    
+                </div>
+                <div class="control-mobile">
+                    <p>bombs: +10<br>
+                        timeBonus: +1/3sec</p>
+                    <p>Tap and hold to engage, player will follow your finger or thumb. </p>
+                    <p>Weapon fires automatically while player is engaged. </p>
+                    
+                </div>
             </section>
 
             <section id="credits" style="display:none">
                 <h2>Credits</h2>
-                <p><a class="credit-links" target="_blank" href="https://freesound.org/people/DeVern/sounds/530461/">Dark Theme Ambience</a></p>
-                <p><a class="credit-links" target="_blank" href="https://freesound.org/people/Migfus20/sounds/564001/">Light Theme Ambience</a></p>
+                <p><a class="credit-links" target="_blank" href="https://freesound.org/people/brad91/sounds/516880/">Dark Theme Music</a></p>
+                <p><a class="credit-links" target="_blank" href="https://freesound.org/people/Migfus20/sounds/564001/">Light Theme Music</a></p>
                 <p><a class="credit-links" target="_blank" href="https://freesound.org/people/Volvion/sounds/609783/">Ghost Sound</a></p>
                 <p><a class="credit-links" target="_blank" href="https://sfxr.me/">Point Scored Sound</a></p>
-                <p><a class="credit-links" target="_blank" href="https://fontawesome.com/search?m=free/">Game Pieces</a></p>
+                <p><a class="credit-links" target="_blank" href="https://fontawesome.com/search?m=free/">Icons</a></p>
 
                 
             </section>
-
+        </div>
+        <h2 id="warning" style="display: none">Ran out of bombs. Come back later... and bring pizza.</h2>
             <div class="button-wrapper">
                 <input id="name_input" type="text" placeholder="EnterName">
                 <button id="start_button" type="submit">Start</button>
@@ -123,6 +148,7 @@
         <h2>3..2..1...</h2>
     </div>
     <div id="game_on_screen" class="screen">
+        
         <canvas id="game"></canvas>
 
         <!-- player charactor alive -->
@@ -134,20 +160,20 @@
         <!-- dark mode -->
         <div style="display:none;">
             <img    id="rol_dark"
-                    src="images/player.png">
+                    src="images/rolling-eyes-orange.png">
         </div>
 
 
         <!-- player charactor dead -->
         <!-- light mode -->
         <div style="display:none;">
-            <img    id="dead"
+            <img     id="dead"
                     src="images/face-dizzy-regular.png">
          </div>
          <!-- dark mode -->
         <div style="display:none;">
             <img    id="dead_dark"
-                    src="images/dead.png">
+                    src="images/dizzy-orange.png">
          </div>
 
          <!-- ghost projectile -->
@@ -159,7 +185,7 @@
         <!-- dark mode -->
         <div style="display:none;">
             <img    id="ghost_dark"
-                    src="images/ghost-dark.png">
+                    src="images/ghost-solid-orange.png">
         </div>
 
         <!-- enemy charactor -->
@@ -171,7 +197,7 @@
         <!-- dark mode -->
         <div style="display:none;">
             <img    id="bomb_dark"
-                    src="images/bomb-dark.png">
+                    src="images/bomb-solid-orange.png">
         </div>
 
     </div>
@@ -181,13 +207,13 @@
             <p id="final_name"></p>
             <div class="button-wrapper">
                 <button id="play_again">Play Again</button>
-                <button id="quit">View High Scores</button>
+                <button id="quit">High Scores</button>
             </div>
         </div>
     </div>
     
     <audio id="smooth_jazz" preload="auto"><source src="audio/smooth-jazz.mp3" type="audio/mp3"></audio>
-    <audio id="dark_ambience" preload="auto"><source src="audio/alien-wind.mp3" type="audio/mp3"></audio>
+    <audio id="dark_ambience" preload="auto"><source src="audio/dark-mode-game-music.mp3" type="audio/mp3"></audio>
     <audio id="dead_audio" preload="auto"><source src="audio/game-over.wav" type="audio/wav"></audio>
     <audio id="shoot_audio" preload="auto"><source src="audio/ghost-sound-shoot.mp3" type="audio/mp3"></audio>
     <audio id="321_audio" preload="auto"><source src="audio/3-2-1.wav" type="audio/wav"></audio>
