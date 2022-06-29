@@ -1,4 +1,4 @@
-# space-laser-deluxe
+# Ghost Bomber
 Ghost Bomber (formerly Space Laser)
 
 My final project for Web Scripting 1. 
