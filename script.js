@@ -210,6 +210,7 @@ function handleVisibilityChange() {
     }else{
         $('#pause_button').css('display','none'); 
         $('#play_button').css('display','block');
+        ghostBomber.soundOn = false;
     }
 }
 document.addEventListener("visibilitychange", handleVisibilityChange, false);
