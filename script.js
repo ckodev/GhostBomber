@@ -1065,12 +1065,7 @@ $(document).ready(() => {
     
     ghostBomber.saveHighScore();
     // loads highscores & coresponding names from local storage array and returns them as <li>'s
-    // highScoresName.innerHTML = finalData.map(playerScore => {
-    //     return `<li class="high-scores" >${playerScore.name}</li>`
-    // }).join("");
-    // highScoresScore.innerHTML = finalData.map(playerScore => {
-    //     return `<li class="high-scores" >${playerScore.score}</li>`
-    // }).join("");
+
 
     // music is initialized as off.  Event listeners on play and pause buttons to start and stop game music. 
 
