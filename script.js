@@ -1061,7 +1061,7 @@ $(document).ready(() => {
     ghostBomber.switchScreen('#splash_screen');
     darkMode();
     // adds an underline to the highhscore menu which is shown first on splash screen
-    $('#high-scores-btn').addClass('load')
+    $('#controls-btn').addClass('load')
     
     ghostBomber.saveHighScore();
     // loads highscores & coresponding names from local storage array and returns them as <li>'s
